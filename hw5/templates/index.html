@@ -5,6 +5,12 @@
   <meta charset="utf-8">
   <title>Business Search</title>
   <link rel="stylesheet" href="../static/style.css">
+  <!-- <script type = "text/javascript">  
+    function submit() {
+      alert("call submit man");
+    }  
+  </script>   -->
+
 </head>
 
 <body>
@@ -12,9 +18,9 @@
     <div class="mainPage">
       <h1>Business Search</h1>
       <h2>Fill out the form to get businesses near you!</h2>
-      <form action="" style="color:blue;">
+      <form name="partOne" action="" style="color:blue;" onsubmit="submitlol();">
         <label>Keyword</label><label style="color:red;">*</label><br>
-        <input type="text" name="kw">
+        <input type="text" name="kw" required>
         <br><br>
         <div class="twoBox">
           <div>
@@ -42,11 +48,10 @@
         <hr>
         <label><strong>Want us to auto-detect your location? Check here</strong></label>
         <input type="checkbox" name="autoDetect">
-      </form>
-      <br><br>
-      <form action="xx.py" id="form1">
+        <br><br>
+        <!-- we cannot call function submit  -->
         <input type="submit" value="SUBMIT" class="subBut">
-        <input type="submit" value="CLEAR" class="clearBut">
+        <input type="button" value="CLEAR" class="clearBut" onclick="cc();">
       </form>
     </div>
     <div class="searchResult">
@@ -61,12 +66,9 @@
         <h2 class="srr">Phone Number</h2>
         <h2 class="srr">Price</h2>
       </div>
-      
-      
-      
-  
     </div>
   </div>
+  <script src="../static/func.js" charset="utf-8"></script>
 </body>
 
 </html>
