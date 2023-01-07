@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Business Search</title>
+  <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+  <div class="flex-container">
+    <div class="mainPage">
+      <h1>Business Search</h1>
+      <h2>Fill out the form to get businesses near you!</h2>
+      <form action="" style="color:blue;">
+        <label>Keyword</label><label style="color:red;">*</label><br>
+        <input type="text" name="kw">
+        <br><br>
+        <div class="twoBox">
+          <div>
+            <label>Distance(miles)</label>
+            <br>
+            <input type="number" name="dm">
+          </div>
+          <div class="fc">
+            <label style="text-align: right;">Category</label>
+            <br>
+            <select name="fc" id="foodCategory">
+              <option value="default">Default</option>
+              <option value="anm">Arts & Entertainment</option>
+              <option value="hnm">Health & Medical</option>
+              <option value="hnt">Hotels & Travel</option>
+              <option value="fd">Food</option>
+              <option value="ps">Professional Service</option>
+            </select>
+          </div>
+        </div>
+        <br><br>
+        <label>Location</label><label style="color:red;">*</label><br>
+        <input type="text" name="location" required minlength="4">
+        <br><br>
+        <hr>
+        <label><strong>Want us to auto-detect your location? Check here</strong></label>
+        <input type="checkbox" name="autoDetect">
+      </form>
+      <br><br>
+      <form action="xx.py" id="form1">
+        <input type="submit" value="SUBMIT" class="subBut">
+        <input type="submit" value="CLEAR" class="clearBut">
+      </form>
+    </div>
+  </div>
+
+</body>
+
+</html>
