@@ -5,12 +5,6 @@
   <meta charset="utf-8">
   <title>Business Search</title>
   <link rel="stylesheet" href="../static/style.css">
-  <!-- <script type = "text/javascript">  
-    function submit() {
-      alert("call submit man");
-    }  
-  </script>   -->
-
 </head>
 
 <body>
@@ -18,7 +12,7 @@
     <div class="mainPage">
       <h1>Business Search</h1>
       <h2>Fill out the form to get businesses near you!</h2>
-      <form name="partOne" action="" style="color:blue;" onsubmit="submitlol();">
+      <form name="partOne" action="" style="color:blue;" onsubmit="submitlol(event)">
         <label>Keyword</label><label style="color:red;">*</label><br>
         <input type="text" name="kw" required>
         <br><br>
@@ -43,7 +37,7 @@
         </div>
         <br><br>
         <label>Location</label><label style="color:red;">*</label><br>
-        <input type="text" name="location" required minlength="4">
+        <input type="text" name="location" minlength="4">
         <br><br>
         <hr>
         <label><strong>Want us to auto-detect your location? Check here</strong></label>
@@ -54,6 +48,10 @@
         <input type="button" value="CLEAR" class="clearBut" onclick="cc();">
       </form>
     </div>
+    <div class="APIresult">
+
+    </div>
+
     <div class="searchResult">
       <div class="srleft">
         <h2 class="srl">Status</h2>

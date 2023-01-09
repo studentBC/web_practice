@@ -75,6 +75,7 @@ input[name="kw"] {
     margin-left: auto;
     margin-right: 0;
 }
+
 .mainPage {
     display: flex;
     flex-flow: nowrap;
@@ -87,14 +88,64 @@ input[name="kw"] {
     margin: auto;
     padding: 0, 20px, 0, 20px;
 }
+
 .searchResult {
     display: none;
     flex-flow: row wrap;
-  
+
     /* Then we define how is distributed the remaining space */
     justify-content: space-around;
-    
+
     padding: 0;
     margin: 0;
     list-style: none;
+}
+
+.APIresult {
+    display: none;
+    flex-flow: column wrap;
+
+    /* Then we define how is distributed the remaining space */
+    justify-content: space-around;
+
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.arow {
+    display: flex;
+    flex-flow: row wrap;
+    /* Then we define how is distributed the remaining space */
+    justify-content: space-around;
+    align-items: stretch;
+    background-color: #f1f1f1;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.arow .no {
+    flex: 1 1 10px;
+    text-align: center;
+}
+
+.img {
+    flex: 1 1 30px;
+    text-align: center;
+}
+
+.arow .bn {
+    flex: 1 1 20px;
+    text-align: center;
+}
+
+.arow .rating {
+    flex: 1 1 10px;
+    text-align: center;
+}
+
+.arow .dist {
+    flex: 1 1 10px;
+    text-align: center;
 }
