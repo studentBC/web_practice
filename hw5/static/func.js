@@ -59,17 +59,10 @@ async function callAPI(url) {
                     start += jsobj.businesses.length;
                     left -= jsobj.businesses.length;
                 });
-            // console.log('we left: ')
-            // console.log(left);
         }
     }
     console.log(jsonObjArray.length);
-    for (let i = 0; i < jsonObjArray.length; i++) {
-        createAPIresultTable(jsonObjArray[i]);
-    }
-
-
-    // });
+    createAPIresultTable();
 }
 
 function submitlol(event) {
@@ -148,35 +141,46 @@ function sortColumn(array, col) {
     for (let i = 1; i < array.length; i++) {
         console.log(array[i][0]);
         console.log(table.rows[i].cells[1].innerHTML);
+        //the image is not inner text so we need to change it!
         table.rows[i].cells[1].innerText = array[i][1];
+        //the business name still need to show its link
         table.rows[i].cells[2].innerText = array[i][2];
         table.rows[i].cells[3].innerText = array[i][3];
         table.rows[i].cells[4].innerText = array[i][4];
     }
+    prevCol = col;
 }
 
-function createAPIresultTable(jsonObj) {
+function createAPIresultTable() {
     console.log('enter to createAPIresultTable');
     //store json obj into data array
-    var len = jsonObj.length;
+    var len = jsonObjArray.length;
     console.log(len);
     let data = [];
     if (len > 0) {
+        console.log('enter to creat !!!');
         const elems = document.getElementsByClassName("APIresult");
         for (let i = 0; i < elems.length; i++) elems[i].style.display = 'flex';
-        for (let i = 0; i < len; i++) {
-            let tmp = [];
-            tmp.push(i + 1);
-            if (jsonObj.businesses[i]?.image_url) tmp.push(jsonObj.businesses[i].image_url);
-            else tmp.push('http://clipart-library.com/images/dc45Exp9i.png');
-            if (jsonObj.businesses[i]?.name) tmp.push(jsonObj.businesses[i].name);
-            else tmp.push('fuck');
-            if (jsonObj.businesses[i]?.rating) tmp.push(jsonObj.businesses[i].rating);
-            else tmp.push(-1);
-            if (jsonObj.businesses[i]?.distance) tmp.push(jsonObj.businesses[i].distance);
-            else tmp.push(-1);
-            data.push(tmp);
+        let index = 1;
+        for (let j = 0; j < len; j++) {
+            let jsonObj = jsonObjArray[j];
+            console.log('jsonObj length is '+ jsonObj.businesses.length);
+            for (let i = 0; i < jsonObj.businesses.length; i++) {
+                let tmp = [];
+                tmp.push(index);
+                if (jsonObj.businesses[i]?.image_url) tmp.push(jsonObj.businesses[i].image_url);
+                else tmp.push('http://clipart-library.com/images/dc45Exp9i.png');
+                if (jsonObj.businesses[i]?.name) tmp.push(jsonObj.businesses[i].name);
+                else tmp.push('fuck');
+                if (jsonObj.businesses[i]?.rating) tmp.push(jsonObj.businesses[i].rating);
+                else tmp.push(-1);
+                if (jsonObj.businesses[i]?.distance) tmp.push(jsonObj.businesses[i].distance);
+                else tmp.push(-1);
+                data.push(tmp);
+                index++;
+            }
         }
+        console.log('data length is '+ data.length);
     }
     var table = document.createElement('table');
     table.setAttribute("id", "APIresultTable");
@@ -216,7 +220,9 @@ function createAPIresultTable(jsonObj) {
     tr.appendChild(td5);
 
     table.appendChild(tr);
-    for (let i = 0; i < len; i++) {
+    console.log('before creating table ...');
+    console.log('data length is '+ data.length);
+    for (let i = 0; i < data.length; i++) {
         tr = document.createElement('tr');
         tr.classList.add("arow");
         td1 = document.createElement('td');
@@ -263,7 +269,7 @@ function createAPIresultTable(jsonObj) {
 
         table.appendChild(tr);
     }
-
+    console.log('after creating table ...');
     document.getElementsByClassName("APIresult")[0].appendChild(table);
 }
 
