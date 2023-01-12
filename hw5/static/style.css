@@ -140,6 +140,12 @@ input[name="kw"] {
     text-align: center;
 }
 
+.arow .bn:hover {
+    flex: 1 1 20px;
+    text-align: center;
+    color: mediumblue;
+}
+
 .arow .rating {
     flex: 1 1 10px;
     text-align: center;

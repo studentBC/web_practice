@@ -142,7 +142,12 @@ function sortColumn(array, col) {
         console.log(array[i][0]);
         console.log(table.rows[i].cells[1].innerHTML);
         //the image is not inner text so we need to change it!
-        table.rows[i].cells[1].innerText = array[i][1];
+        //table.rows[i].cells[1].innerText = array[i][1];
+        table.rows[i].cells[1].innerText = "";
+        let img = document.createElement('img');
+        img.style.width = "150px";
+        img.src = array[i][1];
+        table.rows[i].cells[1].appendChild(img);
         //the business name still need to show its link
         table.rows[i].cells[2].innerText = array[i][2];
         table.rows[i].cells[3].innerText = array[i][3];
@@ -164,23 +169,23 @@ function createAPIresultTable() {
         let index = 1;
         for (let j = 0; j < len; j++) {
             let jsonObj = jsonObjArray[j];
-            console.log('jsonObj length is '+ jsonObj.businesses.length);
+            console.log('jsonObj length is ' + jsonObj.businesses.length);
             for (let i = 0; i < jsonObj.businesses.length; i++) {
                 let tmp = [];
                 tmp.push(index);
-                if (jsonObj.businesses[i]?.image_url) tmp.push(jsonObj.businesses[i].image_url);
+                if (jsonObj.businesses[i] ? .image_url) tmp.push(jsonObj.businesses[i].image_url);
                 else tmp.push('http://clipart-library.com/images/dc45Exp9i.png');
-                if (jsonObj.businesses[i]?.name) tmp.push(jsonObj.businesses[i].name);
+                if (jsonObj.businesses[i] ? .name) tmp.push(jsonObj.businesses[i].name);
                 else tmp.push('fuck');
-                if (jsonObj.businesses[i]?.rating) tmp.push(jsonObj.businesses[i].rating);
+                if (jsonObj.businesses[i] ? .rating) tmp.push(jsonObj.businesses[i].rating);
                 else tmp.push(-1);
-                if (jsonObj.businesses[i]?.distance) tmp.push(jsonObj.businesses[i].distance);
+                if (jsonObj.businesses[i] ? .distance) tmp.push(jsonObj.businesses[i].distance);
                 else tmp.push(-1);
                 data.push(tmp);
                 index++;
             }
         }
-        console.log('data length is '+ data.length);
+        console.log('data length is ' + data.length);
     }
     var table = document.createElement('table');
     table.setAttribute("id", "APIresultTable");
@@ -205,6 +210,7 @@ function createAPIresultTable() {
     //td2.addEventListener("click", ()=>sortColumn(1));
     td3.appendChild(text3);
     td3.classList.add("bn");
+
     td3.addEventListener("click", () => sortColumn(data, 2));
     td4.appendChild(text4);
     td4.classList.add("rating");
@@ -221,7 +227,7 @@ function createAPIresultTable() {
 
     table.appendChild(tr);
     console.log('before creating table ...');
-    console.log('data length is '+ data.length);
+    console.log('data length is ' + data.length);
     for (let i = 0; i < data.length; i++) {
         tr = document.createElement('tr');
         tr.classList.add("arow");
@@ -229,11 +235,16 @@ function createAPIresultTable() {
         td1.classList.add("no");
         td2 = document.createElement('td');
         td2.classList.add("img");
+        //let nav3 = document.createElement('nav');
+        //we shall create <nav> </nav>
+        // nav3.classList.add("nav-link");
         td3 = document.createElement('td');
         td3.classList.add("bn");
+        console.log('');
+        // td3.classList.add("nav");
         //creating a function which will not be executed immediately => moreinfo.bind(null, jsonObj.businesses[i].name)
         //td3.addEventListener("click", moreInfo.bind(null, jsonObj.businesses[i].name));
-        td3.addEventListener("click", () => moreInfo(jsonObj.businesses[i].name));
+        td3.addEventListener("click", () => moreInfo(data[i][2]));
         td4 = document.createElement('td');
         td4.classList.add("rating");
         td5 = document.createElement('td');
@@ -293,46 +304,47 @@ function moreInfo(name) {
     console.log('enter moreInfo');
     const elems = document.getElementsByClassName("searchResult");
     for (let i = 0; i < elems.length; i++) elems[i].style.display = 'flex';
-    let len = String(jsobj.total);
-    console.log(len);
-    for (let i = 0; i < len; i++) {
-        if (name === jsobj.businesses[i].name) {
-            var addr = "",
-                trs = "",
-                cate = "";
-            for (let j = 0; j < Object.keys(jsobj.businesses[0].location.display_address).length; j++) {
-                addr += jsobj.businesses[j].location.display_address[j];
-                addr += " ";
-            }
-            console.log(addr);
-            //document.getElementById("address").textContent = addr;
-            if (jsobj.businesses[i].phone) document.getElementById("pn").innerHTML = jsobj.businesses[i].phone;
-            else document.getElementById("pn").innerHTML = "None";
-            //document.getElementById("pn").textContent = jsobj.businesses[i].phone;
-            document.getElementById("address").innerHTML = addr;
 
-            for (let j = 0; j < jsobj.businesses[i].transactions.length; j++) {
-                trs += jsobj.businesses[i].transactions[j];
-                trs += " ";
-            }
-            console.log(trs);
-            if (trs.length) document.getElementById("transactionsSupported").innerHTML = trs;
-            else document.getElementById("transactionsSupported").innerHTML = "None";
-            for (let j = 0; j < jsobj.businesses[i].categories.length; j++) {
-                cate += jsobj.businesses[i].categories[j].alias;
-                cate += " ";
-            }
+    for (let a = 0; a < jsonObjArray.length; a++) {
+        let jsobj = jsonObjArray[a];
+        for (let i = 0; i < jsobj.businesses.length; i++) {
+            if (name === jsobj.businesses[i].name) {
+                var addr = "",
+                    trs = "",
+                    cate = "";
+                for (let j = 0; j < Object.keys(jsobj.businesses[0].location.display_address).length; j++) {
+                    addr += jsobj.businesses[j].location.display_address[j];
+                    addr += " ";
+                }
+                console.log(addr);
+                //document.getElementById("address").textContent = addr;
+                if (jsobj.businesses[i].phone) document.getElementById("pn").innerHTML = jsobj.businesses[i].phone;
+                else document.getElementById("pn").innerHTML = "None";
+                //document.getElementById("pn").textContent = jsobj.businesses[i].phone;
+                document.getElementById("address").innerHTML = addr;
 
-            console.log(cate);
-            document.getElementById("categories").textContent = cate;
-            //for more info
-            //var anchor = document.createElement('a');
-            let anchor = document.getElementById("minfo");
-            //var anchorText = document.createTextNode('Yelp');
-            anchor.href = jsobj.businesses[i].url;
-            //anchor.setAttribute('href', jsobj.businesses[i].url);
-            break;
+                for (let j = 0; j < jsobj.businesses[i].transactions.length; j++) {
+                    trs += jsobj.businesses[i].transactions[j];
+                    trs += " ";
+                }
+                console.log(trs);
+                if (trs.length) document.getElementById("transactionsSupported").innerHTML = trs;
+                else document.getElementById("transactionsSupported").innerHTML = "None";
+                for (let j = 0; j < jsobj.businesses[i].categories.length; j++) {
+                    cate += jsobj.businesses[i].categories[j].alias;
+                    cate += " ";
+                }
+
+                console.log(cate);
+                document.getElementById("categories").textContent = cate;
+                //for more info
+                //var anchor = document.createElement('a');
+                let anchor = document.getElementById("minfo");
+                //var anchorText = document.createTextNode('Yelp');
+                anchor.href = jsobj.businesses[i].url;
+                //anchor.setAttribute('href', jsobj.businesses[i].url);
+                break;
+            }
         }
     }
-
 }
