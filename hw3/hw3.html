@@ -1,80 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <style>
-      a:link {
-        color: black;
-        background-color: transparent;
-        text-decoration: none;
-      }
-      td {
-        padding-left: 5px;
-        font-size: 12px;
-        font-color: black;
-      }
-      table {
-        width: 60%;
-        text-align: center;
-        border: 2px solid;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      th {
-        font-size: 2.5em; /* 40px/16=2.5em*/
-        text-align: center;
-      }
-      img {
-          display: block;
-          margin-left: auto;
-          margin-right: auto;
-          width: 80%;
-      }
-      p {
-        text-align: center;
-      }
-      .logo {
-        text-align: center;
-      }
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  </head>
-  <body>
-    <table>
-        <thead>
-          <tr>
-            <th>Paul James</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <a href="index2.html" >home </a>
-              &nbsp;&nbsp;
-              <a href="index2.html">nature</a>
-              &nbsp;&nbsp;
-              <a href="index2.html">urban</a>
-              &nbsp;&nbsp;
-              <a href="index2.html">bio</a>
-             </td>
-          </tr>
-        </tbody>
-    </table>
-    <br style="line-height:300px">
-    <img src="https://csci571.com/hw/hw3/images/pier.jpg" alt="pier">
-    <br>
-    <img src="https://csci571.com/hw/hw3/images/road.jpeg" alt="road">
-    <br>
-    <img src="https://csci571.com/hw/hw3/images/lake.jpg" alt="lake">   
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <p>© 2023 by Paul James</p>
-    <div class = "logo">
-      <a class="fa fa-facebook"></a>
-      <a class="fa fa-twitter"></a>
-      <a class="fa fa-instagram"></a>
-    </div>
-  </body>
+
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <style>
+    a:link {
+      color: black;
+      background-color: transparent;
+      text-decoration: none;
+    }
+
+    td {
+      padding-left: 5px;
+      font-size: 12px;
+      font-color: black;
+    }
+
+    .col {
+      padding-left: 0em;
+      padding-right: 0em;
+      flex-shrink: unset;
+    }
+
+    .row {
+      padding-left: 0em;
+      padding-right: 0em;
+      flex-shrink: unset;
+    }
+
+    table {
+      width: 60%;
+      text-align: center;
+      border: 1px solid;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .HomePictures {
+      padding-left: 4em;
+      padding-right: 4em;
+    }
+
+    th {
+      font-size: 2.5em;
+      /* 40px/16=2.5em*/
+      text-align: center;
+    }
+
+    img {
+      padding-top: 1em;
+      display: block;
+      /* margin-left: 1em;
+      margin-right: 1em; */
+      width: 100%;
+      height: 400px;
+    }
+
+    p {
+      text-align: center;
+    }
+
+    .logo {
+      text-align: center;
+    }
+
+    .telement {
+      padding-top: 1em;
+      padding-bottom: 2em;
+      font-size: 12pt;
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+  <table>
+    <thead>
+      <tr>
+        <th style="padding-top: 1em;">James Jantz</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="telement">
+          <a onclick="showH()" style="color:black" id="hh">home </a>
+          &nbsp;&nbsp;
+          <a onclick="showN()" style="color:gray" id="nn">nature</a>
+          &nbsp;&nbsp;
+          <a style="color:gray">urban</a>
+          &nbsp;&nbsp;
+          <a style="color:gray">video</a>
+          &nbsp;&nbsp;
+          <a style="color:gray">bio</a>
+          &nbsp;&nbsp;
+          <a style="color:gray">photo albums</a>
+          &nbsp;&nbsp;
+          <a style="color:gray">book online</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br style="line-height:300px">
+  <br>
+  <div class="HomePictures" style="display: show;">
+    <h5 id="subtitle" style="color: white;">Nature</p>
+      <div class="row flex-nowrap  justify-content-center g-2">
+        <div class="col-6 flex-nowrap">
+          <img src="./images/pier.jpg" id="first">
+        </div>
+        <div class="col-6 flex-nowrap ">
+          <img src="./images/road.jpg" id="second">
+        </div>
+      </div>
+      <div class="row flex-nowrap justify-content-evenly g-2">
+        <div class="col-6 flex-nowrap">
+          <img src="./images/lake.jpg" id="third">
+        </div>
+        <div class="col-6 flex-nowrap">
+          <img src="./images/mountain.jpg" id="fourth">
+        </div>
+      </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <p>© 2023 by James Jantz</p>
+  <div class="logo">
+    <a class="fa fa-facebook"></a>
+    <a class="fa fa-twitter"></a>
+    <a class="fa fa-instagram"></a>
+  </div>
+</body>
+<script type="text/javascript">
+  function showH() {
+    document.getElementById('subtitle').style.color = 'white';
+    document.getElementById('hh').style.color = 'black';
+    document.getElementById('nn').style.color = 'gray';
+    document.getElementById('first').src = './images/pier.jpg';
+    document.getElementById('second').src = './images/road.jpg';
+    document.getElementById('third').src = './images/lake.jpg';
+    document.getElementById('fourth').src = './images/mountain.jpg';
+  }
+
+  function showN() {
+    document.getElementById('subtitle').style.color = 'black';
+    document.getElementById('nn').style.color = 'black';
+    document.getElementById('hh').style.color = 'gray';
+    document.getElementById('first').src = './images/koalas.jpg';
+    document.getElementById('second').src = './images/horses.jpg';
+    document.getElementById('third').src = './images/geko.jpg';
+    document.getElementById('fourth').src = './images/horses.jpg';
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
 </html>
