@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   <style>
@@ -11,35 +12,63 @@
       text-decoration: none;
     }
 
+    button {
+      padding: 0;
+      border: none;
+      background: none;
+    }
+
     td {
       padding-left: 5px;
-      font-size: 12px;
+      font-size: 24px;
       font-color: black;
+      max-width: 100%;
+      white-space: nowrap;
     }
 
     .col {
       padding-left: 0em;
       padding-right: 0em;
-      flex-shrink: unset;
+      /* padding-bottom: 0.5em; */
+    }
+
+    .flex {
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 3.5rem;
     }
 
     .row {
       padding-left: 0em;
       padding-right: 0em;
-      flex-shrink: unset;
+      padding-bottom: 0.5em;
     }
 
     table {
-      width: 60%;
+      width: 700px;
       text-align: center;
       border: 1px solid;
-      margin-left: auto;
-      margin-right: auto;
+      /* margin-left: fixed;
+      margin-right: fixed; */
+      margin-left: 30vw;
+      /* margin-right: 500px; */
+      padding-top: 3em;
+      /* max-width: 100%; */
+      white-space: nowrap;
+      table-layout: fixed;
     }
 
     .HomePictures {
       padding-left: 4em;
       padding-right: 4em;
+    }
+
+    .row>* {
+      width: unset;
+      height: unset;
     }
 
     th {
@@ -49,20 +78,30 @@
     }
 
     img {
-      padding-top: 1em;
-      display: block;
+      padding-top: 3;
+      margin-top: 3;
+      /* display: block; */
       /* margin-left: 1em;
       margin-right: 1em; */
-      width: 100%;
-      height: 400px;
+      /* max-width: 100%; */
+      width: 800px;
+      height: 800px;
     }
 
     p {
       text-align: center;
     }
 
+    .fa {
+      color: black;
+    }
+
     .logo {
       text-align: center;
+    }
+
+    .flex-container {
+      position: fixed;
     }
 
     .telement {
@@ -75,63 +114,63 @@
 </head>
 
 <body>
+  <br>
+  <br>
   <table>
-    <thead>
-      <tr>
-        <th style="padding-top: 1em;">James Jantz</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="telement">
-          <a onclick="showH()" style="color:black" id="hh">home </a>
-          &nbsp;&nbsp;
-          <a onclick="showN()" style="color:gray" id="nn">nature</a>
-          &nbsp;&nbsp;
-          <a style="color:gray">urban</a>
-          &nbsp;&nbsp;
-          <a style="color:gray">video</a>
-          &nbsp;&nbsp;
-          <a style="color:gray">bio</a>
-          &nbsp;&nbsp;
-          <a style="color:gray">photo albums</a>
-          &nbsp;&nbsp;
-          <a style="color:gray">book online</a>
-        </td>
-      </tr>
-    </tbody>
+    <tr>
+      <td style="padding-top:1em;">
+        <h1>James Jantz</h1>
+      </td>
+    </tr>
+    <tr>
+      <td class="telement">
+        <button onclick="showH()" style="color:black" id="hh">home </button>
+        &nbsp;&nbsp;
+        <button onclick="showN()" style="color:gray" id="nn">nature</button>
+        &nbsp;&nbsp;
+        <a style="color:gray">urban</a>
+        &nbsp;&nbsp;
+        <a style="color:gray">video</a>
+        &nbsp;&nbsp;
+        <a style="color:gray">bio</a>
+        &nbsp;&nbsp;
+        <a style="color:gray">photo albums</a>
+        &nbsp;&nbsp;
+        <a style="color:gray">book online</a>
+      </td>
+    </tr>
   </table>
   <br style="line-height:300px">
   <br>
   <div class="HomePictures" style="display: show;">
-    <h5 id="subtitle" style="color: white;">Nature</p>
-      <div class="row flex-nowrap  justify-content-center g-2">
-        <div class="col-6 flex-nowrap">
-          <img src="./images/pier.jpg" id="first">
-        </div>
-        <div class="col-6 flex-nowrap ">
-          <img src="./images/road.jpg" id="second">
-        </div>
+    <h5 id="subtitle" style="color: white;">Nature</h5>
+    <div class="row flex-nowrap  g-2">
+      <div class="col-6 flex-nowrap">
+        <img src="./images/pier.jpg" id="first">
       </div>
-      <div class="row flex-nowrap justify-content-evenly g-2">
-        <div class="col-6 flex-nowrap">
-          <img src="./images/lake.jpg" id="third">
-        </div>
-        <div class="col-6 flex-nowrap">
-          <img src="./images/mountain.jpg" id="fourth">
-        </div>
+      <div class="col-6 flex-nowrap ">
+        <img src="./images/road.jpg" id="second">
       </div>
+    </div>
+    <div class="row flex-nowrap g-2">
+      <div class="col-6 flex-nowrap">
+        <img src="./images/lake.jpg" id="third">
+      </div>
+      <div class="col-6 flex-nowrap">
+        <img src="./images/mountain.jpg" id="fourth">
+      </div>
+    </div>
   </div>
   <br>
   <br>
   <br>
   <br>
   <br>
-  <p>© 2023 by James Jantz</p>
+  <p style="font-size:26px">© 2023 by James Jantz</p>
   <div class="logo">
-    <a class="fa fa-facebook"></a>
-    <a class="fa fa-twitter"></a>
-    <a class="fa fa-instagram"></a>
+    <a class="fa fa-facebook-f" style="font-size:24px"></a>
+    <a class="fa fa-twitter" style="font-size:24px"></a>
+    <a class="fa fa-instagram" style="font-size:24px"></a>
   </div>
 </body>
 <script type="text/javascript">
@@ -152,7 +191,7 @@
     document.getElementById('first').src = './images/koalas.jpg';
     document.getElementById('second').src = './images/horses.jpg';
     document.getElementById('third').src = './images/geko.jpg';
-    document.getElementById('fourth').src = './images/horses.jpg';
+    document.getElementById('fourth').src = './images/shark.jpg';
   }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
