@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Business Search</title>
+  <!-- <link rel="stylesheet" href="../static/style.css"> -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="d-flex justify-content-end">
+    <button type="button" id="sea" class="customBUT align-items-end" (click)="clickTab('sea')">Search</button>
+    <button type="button" id="mb" style="border-color: transparent;" class="customBUT align-items-end"
+      (click)="clickTab('mb')">My Bookings</button>
+  </div>
+
+
+  <div class="flex-container">
+    <div class="mainPage">
+      <h1>Business Search</h1>
+      <h2>Fill out the form to get businesses near you!</h2>
+      <form style="color:blue;" (ngSubmit)="submitlol(form)" #form="ngForm">
+        <label>Keyword</label><label style="color:red;">*</label><br>
+        <input type="text" ngModel name="kw" required>
+        <br><br>
+        <div class="twoBox">
+          <div>
+            <label>Distance(miles)</label>
+            <br>
+            <input type="number" ngModel name="dm">
+          </div>
+          <div class="fc">
+            <label style="text-align: right;">Category</label>
+            <br>
+            <select ngModel name="fc" id="foodCategory">
+              <option value="default">Default</option>
+              <option value="anm">Arts & Entertainment</option>
+              <option value="hnm">Health & Medical</option>
+              <option value="hnt">Hotels & Travel</option>
+              <option value="fd">Food</option>
+              <option value="ps">Professional Service</option>
+            </select>
+          </div>
+        </div>
+        <br><br>
+        <label>Location</label><label style="color:red;">*</label><br>
+        <input type="text" ngModel name="location" minlength="4">
+        <br><br>
+        <hr>
+        <label><strong>Want us to auto-detect your location? Check here</strong></label>
+        <input type="checkbox" ngModel name="autoDetect">
+        <br><br>
+        <!-- we cannot call function submit  -->
+        <input type="submit" value="SUBMIT" class="subBut">
+        <input type="button" value="CLEAR" class="clearBut" (click)="form.resetForm()" >
+      </form>
+    </div>
+    <div id="APIresult" class="APIresult">
+
+    </div>
+
+    <div id="searchResult" class="searchResult">
+      <div class="srleft">
+        <h2 class="srl">Status</h2>
+        <p class="openStatus"></p>
+        <h2 class="srl">Address</h2>
+        <p id="address"></p>
+        <h2 class="srl">Transactions Supported</h2>
+        <p id="transactionsSupported"></p>
+        <h2 class="srl">More info</h2>
+        <a id="minfo" href="">Yelp</a>
+      </div>
+      <div class="srright">
+        <h2 class="srr">Category</h2>
+        <p id="categories"></p>
+        <h2 class="srr">Phone Number</h2>
+        <p id="pn"></p>
+        <h2 class="srr">Price</h2>
+        <p id="money">$$$</p>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
+  </script>
+</body>
+
+</html>
