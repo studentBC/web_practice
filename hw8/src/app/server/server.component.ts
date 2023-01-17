@@ -8,11 +8,21 @@ declare global {
     var long: 0;
     var res: 0;
     var jsobj: object;
+    var reserveNo: number;
     var jsonText: string;
     var ascending: boolean,
         prevCol: -1;
     var jsonObjArray: object[];
     var jsonStrArray: string[];
+    var modalDisplay: string;
+    //for reserve info
+    var db: Map<string, string[]>;
+    var no: string[];
+    var email: string[];
+    var time: string[];
+    var businessName: string[];
+    var date: string[];
+    var clickedBN: string;
 }
 
 @Component({
@@ -26,6 +36,10 @@ export class ServerComponent implements OnInit {
         globalThis.ascending = true;
         globalThis.jsonObjArray = [];
         globalThis.jsonStrArray = [];
+        globalThis.modalDisplay = "none";
+        globalThis.clickedBN = "lol";
+        globalThis.reserveNo = 1;
+        globalThis.db = new Map<string, string[]>();
     }
     constructor(private http: HttpClient) {
 
@@ -37,14 +51,50 @@ export class ServerComponent implements OnInit {
         globalThis.jsonObjArray.push(jojo);
         globalThis.jsonStrArray.push(JSON.stringify(jojo));
     }
+    ///////////////// deal with UI click /////////////////
     clickTab(id: string) {
         let tabs = document.getElementById("sea");
         let target = document.getElementById("mb");
-        // tabs.classList.add('active');
-        if (target) target.style.borderColor = 'transparent';
-        if (tabs) tabs.style.borderColor = 'transparent';
         let t = document.getElementById(id);
-        if (t) t.style.borderColor = 'black';
+        // tabs.classList.add('active');
+        target!.style.borderColor = 'transparent';
+        tabs!.style.borderColor = 'transparent';
+        t!.style.borderColor = 'black';
+        // show tab
+        let tabID: string;
+        if (id == 'sea') {
+            tabID = "searchTab";
+            let showTB = document.getElementById("searchTab");
+            let noTB = document.getElementById("myBookingsTab");
+            noTB!.style.display = "none";
+            showTB!.style.display = "block";
+        } else {
+            let showTB = document.getElementById("myBookingsTab") as HTMLElement;
+            let noTB = document.getElementById("searchTab");
+            noTB!.style.display = "none";
+            showTB!.style.display = "block";
+            showTB.innerHTML = "";
+            //dynamically create reserve table
+            this.createReserveTable();
+        }
+    }
+    putMeUp(id: string) {
+        console.log('we call tab ');
+        console.log(id);
+        let t1 = document.getElementById("businessTab");
+        let t2 = document.getElementById("Maplocation");
+        let t3 = document.getElementById("Reviews");
+        let tt = document.getElementById(id);
+        t1!.style.display = "none";
+        t2!.style.display = "none";
+        t3!.style.display = "none";
+        tt!.style.display = "block";
+        // tabs.classList.add('active');
+        // t1?.style.zIndex = '-1';
+        // if (target) target.style.borderColor = 'transparent';
+        // if (tabs) tabs.style.borderColor = 'transparent';
+        // let t = document.getElementById(id);
+        // if (t) t.style.borderColor = 'black';
     }
     ///////////// clear button  ///////////////
     // cc() {
@@ -108,13 +158,14 @@ export class ServerComponent implements OnInit {
                     .then(response => this.initial(response))
                     .then(response => {
                         start += jojo.businesses.length;
-                        let job = JSON.parse(globalThis.jsonStrArray[jsonStrArray.length-1]);
+                        let job = JSON.parse(globalThis.jsonStrArray[jsonStrArray.length - 1]);
                         left -= job.businesses.length;
                     });
             }
         }
         console.log(jsonObjArray.length);
         this.createAPIresultTable();
+        this.createReviewTable();
         return;
     }
     // showPosition(position: JSON) {
@@ -160,13 +211,13 @@ export class ServerComponent implements OnInit {
             }
         } else {
             if (!debug) {
-            loc = loc.replace(/\s+/g, '+');
-            var gkey = '';
-            var gr = this.httpGet('https://maps.googleapis.com/maps/api/geocode/json?address=' + loc + '&key=' + gkey);
-            //call python get method to get the address
-            var res = JSON.parse(gr);
-            globalThis.lat = res.results[0].geometry.location.lat;
-            globalThis.long = res.results[0].geometry.location.lng;
+                loc = loc.replace(/\s+/g, '+');
+                var gkey = '';
+                var gr = this.httpGet('https://maps.googleapis.com/maps/api/geocode/json?address=' + loc + '&key=' + gkey);
+                //call python get method to get the address
+                var res = JSON.parse(gr);
+                globalThis.lat = res.results[0].geometry.location.lat;
+                globalThis.long = res.results[0].geometry.location.lng;
             }
         }
         //call YELP https://docs.developer.yelp.com/reference/v3_business_search
@@ -175,8 +226,8 @@ export class ServerComponent implements OnInit {
         if (debug) {
             url = 'https://api.yelp.com/v3/businesses/search?term=delis&location=Austin&limit=50'
         } else {
-             url = 'https://api.yelp.com/v3/businesses/search?term=' + kw + '&latitude=' + lat + '&longitude=' + long +
-            '&categories=' + fc + '&radius=' + dist + '&limit=50';
+            url = 'https://api.yelp.com/v3/businesses/search?term=' + kw + '&latitude=' + lat + '&longitude=' + long +
+                '&categories=' + fc + '&radius=' + dist + '&limit=50';
         }
         this.callAPI(url);
     }
@@ -345,6 +396,7 @@ export class ServerComponent implements OnInit {
     //when user click the title and ask for more info
     moreInfo(name: string) {
         console.log('enter moreInfo');
+        globalThis.clickedBN = name;
         const elems = document.getElementsByClassName("searchResult");
         for (let i = 0; i < elems.length; i++) {
             const ee = elems[i] as HTMLElement;
@@ -364,8 +416,8 @@ export class ServerComponent implements OnInit {
                     }
                     console.log(addr);
                     //document.getElementById("address").textContent = addr;
-                    let tmp =document.getElementById("pn") as HTMLElement;
-                    if (jsobj.businesses[i].phone ) {
+                    let tmp = document.getElementById("pn") as HTMLElement;
+                    if (jsobj.businesses[i].phone) {
                         tmp.innerHTML = jsobj.businesses[i].phone;
                     } else {
                         tmp.innerHTML = "None";
@@ -402,5 +454,186 @@ export class ServerComponent implements OnInit {
                 }
             }
         }
+    }
+    // handle modal 
+    //https://stackoverflow.com/questions/59590391/bootstrap-modal-is-not-shown-on-angular-8-on-click
+    openModal() {
+        console.log('enter to open');
+        let tmp = document.getElementById('reserveModal') as HTMLElement;
+        tmp.style.display = "contents";
+    }
+    onCloseHandled() {
+        console.log('enter to onCloseHandled');
+        let tmp = document.getElementById('reserveModal') as HTMLElement;
+        let tt = document.getElementById('reserve-form') as HTMLFormElement;
+        tt!.reset();
+        tmp.style.display = "none";
+        //globalThis.modalDisplay = "none";
+    }
+    submitModal(form: NgForm): void {
+        alert('Reservation created!');
+        // no name date time email
+        let no = globalThis.reserveNo.toString(),
+            name = globalThis.clickedBN,
+            email = form.value.mem,
+            date = form.value.mdate,
+            hour = form.value.mmh,
+            min = form.value.mmm;
+        console.log(no);
+        console.log(name);
+        console.log(email);
+        console.log(date);
+        console.log(hour);
+        console.log(min);
+        globalThis.reserveNo++;
+        console.log('we set db key: '+ name);
+        globalThis.db.set(name, [no, name, date, hour, min, email]);
+        //close and clear modal
+        this.onCloseHandled();
+    }
+    ///////////// dynamically deal with reservation table ///////////////
+    createReserveTable() {
+        console.log('enter to createReserveTable');
+        //store json obj into data array
+        var len = globalThis.db.size;
+        console.log(len);
+
+        let data: any[] = [];
+        if (len === 0) {
+            let title = document.createElement('h1') as HTMLElement;
+            console.log(title);
+            title!.textContent = "No reservations to show";
+            title.style.color="red";
+            title.style.textAlign="center";
+            let tmp = document.getElementById("myBookingsTab") as HTMLElement;
+            console.log(tmp);
+            tmp.appendChild(title);
+            return;
+        } 
+        // no, business name, date, time, email, delet button
+        var table = document.createElement('table');
+        table.setAttribute("id", "reserveTable");
+        var tr = document.createElement('tr');
+        var td1 = document.createElement('td');
+        var td2 = document.createElement('td');
+        var td3 = document.createElement('td');
+        var td4 = document.createElement('td');
+        var td5 = document.createElement('td');
+        var td6 = document.createElement('td');
+
+        var text1 = document.createTextNode('#.');
+        var text2 = document.createTextNode('Business Name');
+        var text3 = document.createTextNode('Date');
+        var text4 = document.createTextNode('Time');
+        var text5 = document.createTextNode('E-mail');
+        var text6 = document.createTextNode('deletButton');
+        tr.classList.add("arow");
+        td1.appendChild(text1);
+        td1.classList.add("no");
+        //td1.addEventListener("click", ()=>sortColumn(0));
+        td2.appendChild(text2);
+        td2.classList.add("bn");
+        //td2.addEventListener("click", ()=>sortColumn(1));
+        td3.appendChild(text3);
+        td3.classList.add("date");
+
+        td4.appendChild(text4);
+        td4.classList.add("time");
+
+        td5.appendChild(text5);
+        td5.classList.add("email");
+
+        td6.appendChild(text6);
+        td6.classList.add("deletBut");
+        //td6.classList.add("glyphicon glyphicon-trash");
+        //td6.addEventListener("click", () => this.delReserve(data, 4));
+
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tr.appendChild(td5);
+        tr.appendChild(td6);
+
+        table.appendChild(tr);
+        console.log('before creating table ...');
+        console.log('data length is ' + len);
+        for (let [key, value] of db) {
+            console.log(key + ' : ' + value + ' #### ');
+            tr = document.createElement('tr');
+            tr.classList.add("arow");
+            td1 = document.createElement('td');
+            td1.classList.add("no");
+            td2 = document.createElement('td');
+            td2.classList.add("bn");
+            td3 = document.createElement('td');
+            td3.classList.add("date");
+            td4 = document.createElement('td');
+            td4.classList.add("time");
+            td5 = document.createElement('td');
+            td5.classList.add("email");
+            td6 = document.createElement('td');
+            //td6.classList.add("dist");
+            // td6.classList.add("bi");
+            // td6.classList.add("bi-trash");
+            //td6.classList.add("glyphicon glyphicon-trash");
+            td6.addEventListener("click", () => this.delReserv(key));
+
+            text1 = document.createTextNode(value[0]);
+            text2 = document.createTextNode(value[1]);
+            text3 = document.createTextNode(value[2]);
+            text4 = document.createTextNode(value[3]+':'+value[4]);
+            text5 = document.createTextNode(value[5]);
+            let t6 = document.createElement("p") as HTMLElement;
+            t6.classList.add("fa");
+            t6.classList.add("fa-trash-o");
+            t6.classList.add("restButton");
+            
+            td1.appendChild(text1);
+            td2.appendChild(text2);
+            td3.appendChild(text3);
+            td4.appendChild(text4);
+            td5.appendChild(text5);
+            td6.appendChild(t6);
+
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+            tr.appendChild(td5);
+            tr.appendChild(td6);
+
+            table.appendChild(tr);
+        }
+        console.log('after creating table ...');
+        let tmp = document.getElementById("myBookingsTab") as HTMLElement;
+        console.log(tmp);
+        tmp.appendChild(table);
+    }
+    //delete reservation
+    delReserv(key: string) {
+
+        console.log('enter to del key: ' + key);
+        globalThis.db.delete(key);
+        globalThis.reserveNo--;
+        let table = document.getElementById("reserveTable") as HTMLTableElement;
+        console.log(table);
+        for (let i = 1; i < globalThis.reserveNo; i++) {
+            console.log(table.rows[i]);
+            console.log(table.rows[i].cells[0].innerHTML);
+            console.log(table.rows[i].cells[1].innerHTML);
+            if (table.rows[i].cells[1].innerHTML === key) {
+                table.rows[i].remove();
+                break;
+            }
+        }
+    }
+    //create review table
+    createReviewTable() {
+        document.getElementById('div-02');
+        //name bold
+        //rating
+        //comment
+        //date
     }
 }

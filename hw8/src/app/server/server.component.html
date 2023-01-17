@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <title>Business Search</title>
   <!-- <link rel="stylesheet" href="../static/style.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
@@ -15,9 +16,13 @@
     <button type="button" id="mb" style="border-color: transparent;" class="customBUT align-items-end"
       (click)="clickTab('mb')">My Bookings</button>
   </div>
+  <div id="myBookingsTab" style="display: none;">
+    <h1 style="text-align: center" id="mbTitle">List of your reservations</h1>
+    <!-- <div id="bookingTable">
+    </div> -->
+  </div>
 
-
-  <div class="flex-container">
+  <div class="flex-container" id="searchTab">
     <div class="mainPage">
       <h1>Business Search</h1>
       <h2>Fill out the form to get businesses near you!</h2>
@@ -54,14 +59,28 @@
         <br><br>
         <!-- we cannot call function submit  -->
         <input type="submit" value="SUBMIT" class="subBut">
-        <input type="button" value="CLEAR" class="clearBut" (click)="form.resetForm()" >
+        <input type="button" value="CLEAR" class="clearBut" (click)="form.resetForm()">
       </form>
     </div>
     <div id="APIresult" class="APIresult">
 
     </div>
+  </div>
+  <div id="searchResult" class="searchResult">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link" (click)="putMeUp('businessTab')" href="#businessTab" style="color: black;">Business
+          detail</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="putMeUp('Maplocation')" href="#Maplocation" style="color: black;">Map location</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="putMeUp('Reviews')" href="#Reviews" style="color: black;">Reviews</a>
+      </li>
+    </ul>
 
-    <div id="searchResult" class="searchResult">
+    <section id="businessTab" style="background-color: aliceblue;">
       <div class="srleft">
         <h2 class="srl">Status</h2>
         <p class="openStatus"></p>
@@ -80,8 +99,119 @@
         <h2 class="srr">Price</h2>
         <p id="money">$$$</p>
       </div>
+      <div class="restButton">
+        <button class="resBut" data-bs-toggle="modal" data-bs-target="#reserveModal" (click)="openModal()">Reserve
+          now</button>
+      </div>
+      <div class="socialShare">
+        <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button"
+          data-show-count="false">Tweet</a>
+        <script src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <iframe
+          src="https://www.facebook.com/plugins/share_button.php?href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&layout=button&size=small&width=60&height=20&appId"
+          width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0"
+          allowfullscreen="true"
+          allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+      </div>
+    </section>
+    <section id="Maplocation" style="display: none; background-color: aliceblue;">
+      <!--Google map-->
+      <div class="container-fluid">
+        <div class="map-responsive">
+          <iframe
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Eiffel+Tower+Paris+France"
+            width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+        </div>
+      </div>
+      <!--Google Maps-->
+    </section>
+
+    <section id="Reviews" style="display: none; background-color: aliceblue;">
+      <h1>QAQ...</h1>
+    </section>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="reserveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Reservation form</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+            (click)="form.resetForm();onCloseHandled();"></button>
+        </div>
+        <div class="modal-body">
+          <div class="reserve-form-container">
+            <div class="container">
+              <form action="" id="reserve-form" (ngSubmit)="submitModal(ff)" #ff="ngForm">
+                <div class="row">
+                  <div class="form-group">
+                    <label for="">Email</label>
+                    <input type="email" class="form-control" ngModel name="mem" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="">Date</label>
+                    <input type="date" class="form-control" ngModel name="mdate" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="">Time</label>
+                    <br>
+                    <select id="modalHour" ngModel name="mmh" required>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
+                      <option value="12">12</option>
+                      <option value="13">13</option>
+                      <option value="14">14</option>
+                      <option value="15">15</option>
+                      <option value="16">16</option>
+                      <option value="17">17</option>
+                    </select>
+                    <select id="modalMinute" ngModel name="mmm" required>
+                      <option value="0">00</option>
+                      <option value="15">15</option>
+                      <option value="30">30</option>
+                      <option value="45">45</option>
+                    </select>
+                  </div>
+                  <!-- <label for="appt-time">Time: </label>
+                  <input type="time" list="mH" />
+                  <datalist id="mH">
+                    <option value="10:00:00"></option>
+                    <option value="11:00"></option>
+                    <option value="12:00"></option>
+                    <option value="13:00"></option>
+                    <option value="14:00"></option>
+                    <option value="15:00"></option>
+                    <option value="16:00"></option>
+                    <option value="17:00"></option>
+                  </datalist> -->
+                  <!-- <input type="time" list="Minutes" />
+                  <datalist id="mM">
+                    <option value="00"></option>
+                    <option value="15"></option>
+                    <option value="30"></option>
+                    <option value="45"></option>
+                  </datalist> -->
+                  <div class="form-group submit-container"
+                    style="display: flex; align-items: center; justify-content: center;">
+                    <button type="submit" class="resBut" (click)="submitModal(ff)">
+                      SUBMIT
+                    </button>
+                  </div>
+
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="reset" class="btn btn-dark" data-bs-dismiss="modal" (click)="form.resetForm();onCloseHandled()">Close</button>
+        </div>
+      </div>
     </div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
   </script>

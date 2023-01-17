@@ -1,175 +1,238 @@
 h1 {
-    width: 100%;
-    text-align: left;
+  width: 100%;
+  text-align: left;
 }
 
 h2 {
-    width: 100%;
-    text-align: left;
+  width: 100%;
+  text-align: left;
 }
-.customBUT {
-    background-color:transparent;
-	border-radius:28px;
-	border:1px solid #000000;
-	font-family:Arial;
-	font-size:17px;
-	padding:16px 31px;
-}
-.flex-container {
-    /* We first create a flex layout context */
-    display: flex;
 
-    /* Then we define the flow direction 
+.wrap {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.customBUT {
+  background-color: transparent;
+  border-radius: 28px;
+  border: 1px solid #000000;
+  font-family: Arial;
+  font-size: 17px;
+  padding: 16px 31px;
+}
+
+.flex-container {
+  /* We first create a flex layout context */
+  display: flex;
+  width: fit-content;
+  background-color: aliceblue;
+  /* Then we define the flow direction 
        and if we allow the items to wrap 
      * Remember this is the same as:
      * flex-direction: row;
      * flex-wrap: wrap;
      */
-    flex-flow: nowrap;
-    flex-direction: column;
-    /* Then we define how is distributed the remaining space */
-    justify-content: space-around;
+  flex-flow: nowrap;
+  flex-direction: column;
+  /* Then we define how is distributed the remaining space */
+  justify-content: space-around;
 
-    margin: 0;
-    list-style: none;
-    margin: auto;
+  list-style: none;
+  margin: auto;
 }
 
 
 .subBut {
-    color: white;
-    background-color: blue;
-    border: 2px solid;
-    border: none;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    box-shadow: -6px 6px 0 black;
-    padding: 1em 2em;
-    box-shadow: inset 0 -8px 0 0 rgba(0, 0, 0, .2);
+  color: white;
+  background-color: blue;
+  border: 2px solid;
+  border: none;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  box-shadow: -6px 6px 0 black;
+  padding: 1em 2em;
+  box-shadow: inset 0 -8px 0 0 rgba(0, 0, 0, .2);
 }
 
 .clearBut {
-    color: white;
-    background-color: orange;
-    border: 2px solid;
-    border: none;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    box-shadow: -6px 6px 0 black;
-    padding: 1em 2em;
-    box-shadow: inset 0 -8px 0 0 rgba(0, 0, 0, .2);
+  color: white;
+  background-color: orange;
+  border: 2px solid;
+  border: none;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  box-shadow: -6px 6px 0 black;
+  padding: 1em 2em;
+  box-shadow: inset 0 -8px 0 0 rgba(0, 0, 0, .2);
 }
 
 input[name="kw"] {
-    width: 100%;
+  width: 100%;
 }
 
 .twoBox {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    flex-flow: col wrap;
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  flex-flow: col wrap;
+  width: 100%;
 }
 
 .fc {
-    margin-left: auto;
-    margin-right: 0;
+  margin-left: auto;
+  margin-right: 0;
 }
 
 .mainPage {
-    display: flex;
-    flex-flow: nowrap;
-    flex-direction: column;
-    /* Then we define how is distributed the remaining space */
-    justify-content: space-around;
+  display: flex;
+  flex-flow: nowrap;
+  flex-direction: column;
+  /* Then we define how is distributed the remaining space */
+  justify-content: space-around;
 
-    margin: 0;
-    list-style: none;
-    margin: auto;
-    padding: 0, 20px, 0, 20px;
+  margin: 0;
+  list-style: none;
+  margin: auto;
+  padding: 0, 20px, 0, 20px;
 }
 
 .searchResult {
-    display: none;
-    flex-flow: row wrap;
+  /* display: none; */
+  flex-flow: row wrap;
 
-    /* Then we define how is distributed the remaining space */
-    justify-content: space-around;
+  /* Then we define how is distributed the remaining space */
+  justify-content: space-around;
 
-    padding: 0;
-    margin: 0;
-    list-style: none;
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
 .APIresult {
-    display: none;
-    flex-flow: column wrap;
+  display: none;
+  flex-flow: column wrap;
 
-    /* Then we define how is distributed the remaining space */
-    justify-content: space-around;
+  /* Then we define how is distributed the remaining space */
+  justify-content: space-around;
 
-    padding: 0;
-    margin: 0;
-    list-style: none;
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
 .arow {
-    display: flex;
-    flex-flow: row wrap;
-    /* Then we define how is distributed the remaining space */
-    justify-content: space-around;
-    align-items: stretch;
-    background-color: #f1f1f1;
-    padding: 0;
-    margin: 0;
-    list-style: none;
+  display: flex;
+  flex-flow: row wrap;
+  /* Then we define how is distributed the remaining space */
+  justify-content: space-around;
+  align-items: stretch;
+  background-color: #f1f1f1;
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }
 
 .arow .no {
-    flex: 1 1 10px;
-    text-align: center;
+  flex: 1 1 10px;
+  text-align: center;
 }
 
 .img {
-    flex: 1 1 30px;
-    text-align: center;
+  flex: 1 1 30px;
+  text-align: center;
 }
 
 .arow .bn {
-    flex: 1 1 20px;
-    text-align: center;
+  flex: 1 1 20px;
+  text-align: center;
 }
 
 .arow .bn:hover {
-    flex: 1 1 20px;
-    text-align: center;
-    color: mediumblue;
+  flex: 1 1 20px;
+  text-align: center;
+  color: mediumblue;
 }
+
 body {
-    background-image: url('https://i.redd.it/0afjgw0jxvl51.jpg');
+  background-image: url('https://i.redd.it/0afjgw0jxvl51.jpg');
 }
+
 .arow .rating {
-    flex: 1 1 10px;
-    text-align: center;
+  flex: 1 1 10px;
+  text-align: center;
 }
 
 .arow .dist {
-    flex: 1 1 10px;
-    text-align: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
+  flex: 1 1 10px;
+  text-align: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 .nav-item {
-    flex: 1 1 auto;
-    text-align: center;
-    background-color: transparent;
+  flex: 1 1 auto;
+  text-align: center;
+  background-color: transparent;
+}
+
+.restButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.socialShare {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resBut {
+  box-shadow: inset 0px 0px 0px 0px #cf866c;
+  background: linear-gradient(to bottom, #d0451b 5%, #bc3315 100%);
+  background-color: #d0451b;
+  border-radius: 6px;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 16px;
+  padding: 6px 7px;
+  text-decoration: none;
+  text-shadow: 0px 1px 10px #854629;
+}
+#reserveModal {
+    display: none;
+}
+/* tab css from https://stackoverflow.com/questions/26734479/how-to-link-href-to-a-tab
+https://codepen.io/alvarotrigo/pen/bGoPzMe
+https://codepen.io/alvarotrigo/pen/KKXjJBm
+*/
+/* #tab1:checked ~ section .tab1,
+#tab2:checked ~ section .tab2,
+#tab3:checked ~ section .tab3 {
+  display: block;
+} */
+/* for google map  */
+.map-responsive{
+  overflow:hidden;
+  padding-bottom:50%;
+  position:relative;
+  height:0;
+}
+.map-responsive iframe{
+  left:0;
+  top:0;
+  height:100%;
+  width:100%;
+  position:absolute;
 }
