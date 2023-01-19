@@ -90,27 +90,31 @@ input[name="kw"] {
   margin-left: auto;
   margin-right: 0;
 }
-
+#businessTab {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
 .mainPage {
   display: flex;
   flex-flow: nowrap;
   flex-direction: column;
   /* Then we define how is distributed the remaining space */
   justify-content: space-around;
-
-  margin: 0;
   list-style: none;
-  margin: auto;
-  padding: 0, 20px, 0, 20px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10vh;
+  /* padding: 0, 20px, 0, 20px; */
 }
 
 .searchResult {
   /* display: none; */
-  flex-flow: row wrap;
-
+  flex-flow: column wrap;
+  display: none;
   /* Then we define how is distributed the remaining space */
   justify-content: space-around;
-
+  background-color: aliceblue;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -188,8 +192,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-}
 
+}
+#promotionBut {
+  display: show;
+}
 .socialShare {
   display: flex;
   align-items: center;
@@ -210,9 +217,9 @@ body {
   text-decoration: none;
   text-shadow: 0px 1px 10px #854629;
 }
-#reserveModal {
+/* #reserveModal {
     display: none;
-}
+} */
 /* tab css from https://stackoverflow.com/questions/26734479/how-to-link-href-to-a-tab
 https://codepen.io/alvarotrigo/pen/bGoPzMe
 https://codepen.io/alvarotrigo/pen/KKXjJBm
@@ -236,3 +243,6 @@ https://codepen.io/alvarotrigo/pen/KKXjJBm
   width:100%;
   position:absolute;
 }
+/* .modal-dialog-center {
+  margin-top: 25%;
+} */

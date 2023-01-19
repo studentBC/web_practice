@@ -1,7 +1,8 @@
-import { Component, OnInit, ElementRef } from "@angular/core";
+import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { HttpClient, HttpXsrfTokenExtractor } from "@angular/common/http"
-// platformBrowserDynamic().bootstrapModule(ServerComponent);
+import { NONE_TYPE } from "@angular/compiler";
+import { ModalModule, BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 declare global {
     var lat: 0;
@@ -23,6 +24,9 @@ declare global {
     var businessName: string[];
     var date: string[];
     var clickedBN: string;
+    var jsonReviewText: string;
+    var jsonReveiewStrArray: string[];
+    var nameToUID: Map<string, string>;
 }
 
 @Component({
@@ -30,16 +34,20 @@ declare global {
     templateUrl: './server.component.html',
     styleUrls: ['./server.component.css']
 })
+
 export class ServerComponent implements OnInit {
     /////////////// inital variable realted ////////////
+    @ViewChild('reserveModal') reserveModal: any
     ngOnInit(): void {
         globalThis.ascending = true;
         globalThis.jsonObjArray = [];
         globalThis.jsonStrArray = [];
+        globalThis.jsonReveiewStrArray = [];
         globalThis.modalDisplay = "none";
         globalThis.clickedBN = "lol";
         globalThis.reserveNo = 1;
         globalThis.db = new Map<string, string[]>();
+        globalThis.nameToUID = new Map<string, string>();
     }
     constructor(private http: HttpClient) {
 
@@ -50,6 +58,9 @@ export class ServerComponent implements OnInit {
         globalThis.jsobj = jojo;
         globalThis.jsonObjArray.push(jojo);
         globalThis.jsonStrArray.push(JSON.stringify(jojo));
+    }
+    getReveiew (jojo: object) {
+        globalThis.jsonReveiewStrArray.push(JSON.stringify(jojo));
     }
     ///////////////// deal with UI click /////////////////
     clickTab(id: string) {
@@ -77,6 +88,11 @@ export class ServerComponent implements OnInit {
             //dynamically create reserve table
             this.createReserveTable();
         }
+        const elems = document.getElementsByClassName("searchResult");
+        for (let i = 0; i < elems.length; i++) {
+            const ee = elems[i] as HTMLElement;
+            ee.style.display = 'none';
+        }
     }
     putMeUp(id: string) {
         console.log('we call tab ');
@@ -84,17 +100,32 @@ export class ServerComponent implements OnInit {
         let t1 = document.getElementById("businessTab");
         let t2 = document.getElementById("Maplocation");
         let t3 = document.getElementById("Reviews");
+        if (id != 'businessTab') {
+            const elems = document.getElementsByClassName("promotionBut");
+            for (let i = 0; i < elems.length; i++) {
+                const ee = elems[i] as HTMLElement;
+                ee.style.display = "none";
+            }
+        }
         let tt = document.getElementById(id);
         t1!.style.display = "none";
         t2!.style.display = "none";
         t3!.style.display = "none";
-        tt!.style.display = "block";
-        // tabs.classList.add('active');
-        // t1?.style.zIndex = '-1';
-        // if (target) target.style.borderColor = 'transparent';
-        // if (tabs) tabs.style.borderColor = 'transparent';
-        // let t = document.getElementById(id);
-        // if (t) t.style.borderColor = 'black';
+
+        if (id != 'businessTab') tt!.style.display = "block";
+        else {
+            console.log('enter to change bussinees tab');
+            tt!.style.display = "flex";
+            const elems = document.getElementById("promotionBut");
+            if (!elems) console.log('no bt man !!!');
+            elems!.style.display = "block";
+            console.log(elems!.style.display);
+            // elems = document.getElementsByClassName("socialShare");
+            // for (let i = 0; i < elems.length; i++) {
+            //     const ee = elems[i] as HTMLElement;
+            //     ee.style.display = "flex";
+            // }
+        }
     }
     ///////////// clear button  ///////////////
     // cc() {
@@ -165,7 +196,6 @@ export class ServerComponent implements OnInit {
         }
         console.log(jsonObjArray.length);
         this.createAPIresultTable();
-        this.createReviewTable();
         return;
     }
     // showPosition(position: JSON) {
@@ -262,6 +292,7 @@ export class ServerComponent implements OnInit {
                     else tmp.push(-1);
                     if (jsonObj.businesses[i]?.distance) tmp.push(jsonObj.businesses[i].distance);
                     else tmp.push(-1);
+                    globalThis.nameToUID.set(jsonObj.businesses[i]?.name, jsonObj.businesses[i]?.id);
                     data.push(tmp);
                     index++;
                 }
@@ -396,6 +427,12 @@ export class ServerComponent implements OnInit {
     //when user click the title and ask for more info
     moreInfo(name: string) {
         console.log('enter moreInfo');
+        //let search result table gone
+        const elem = document.getElementsByClassName("APIresult");
+        for (let i = 0; i < elem.length; i++) {
+            const ee = elem[i] as HTMLElement;
+            ee.style.display = 'none';
+        }
         globalThis.clickedBN = name;
         const elems = document.getElementsByClassName("searchResult");
         for (let i = 0; i < elems.length; i++) {
@@ -454,21 +491,26 @@ export class ServerComponent implements OnInit {
                 }
             }
         }
+        //deal with review tab
+        let nn = globalThis.nameToUID.get(name)?.toString()!;
+        this.callReviewAPI(nn);
     }
     // handle modal 
     //https://stackoverflow.com/questions/59590391/bootstrap-modal-is-not-shown-on-angular-8-on-click
-    openModal() {
-        console.log('enter to open');
-        let tmp = document.getElementById('reserveModal') as HTMLElement;
-        tmp.style.display = "contents";
-    }
+    // openModal() {
+    //     console.log('enter to open');
+    //     // this.reserveModal.nativeElement.className = 'modal fade show';
+    //     this.reserveModal.show();
+    //     let tmp = document.getElementById('reserveModal');
+    //     // tmp.style.display = "contents";
+    // }
+
+
+
     onCloseHandled() {
         console.log('enter to onCloseHandled');
-        let tmp = document.getElementById('reserveModal') as HTMLElement;
         let tt = document.getElementById('reserve-form') as HTMLFormElement;
         tt!.reset();
-        tmp.style.display = "none";
-        //globalThis.modalDisplay = "none";
     }
     submitModal(form: NgForm): void {
         alert('Reservation created!');
@@ -486,7 +528,7 @@ export class ServerComponent implements OnInit {
         console.log(hour);
         console.log(min);
         globalThis.reserveNo++;
-        console.log('we set db key: '+ name);
+        console.log('we set db key: ' + name);
         globalThis.db.set(name, [no, name, date, hour, min, email]);
         //close and clear modal
         this.onCloseHandled();
@@ -503,13 +545,13 @@ export class ServerComponent implements OnInit {
             let title = document.createElement('h1') as HTMLElement;
             console.log(title);
             title!.textContent = "No reservations to show";
-            title.style.color="red";
-            title.style.textAlign="center";
+            title.style.color = "red";
+            title.style.textAlign = "center";
             let tmp = document.getElementById("myBookingsTab") as HTMLElement;
             console.log(tmp);
             tmp.appendChild(title);
             return;
-        } 
+        }
         // no, business name, date, time, email, delet button
         var table = document.createElement('table');
         table.setAttribute("id", "reserveTable");
@@ -582,13 +624,13 @@ export class ServerComponent implements OnInit {
             text1 = document.createTextNode(value[0]);
             text2 = document.createTextNode(value[1]);
             text3 = document.createTextNode(value[2]);
-            text4 = document.createTextNode(value[3]+':'+value[4]);
+            text4 = document.createTextNode(value[3] + ':' + value[4]);
             text5 = document.createTextNode(value[5]);
             let t6 = document.createElement("p") as HTMLElement;
             t6.classList.add("fa");
             t6.classList.add("fa-trash-o");
             t6.classList.add("restButton");
-            
+
             td1.appendChild(text1);
             td2.appendChild(text2);
             td3.appendChild(text3);
@@ -628,12 +670,123 @@ export class ServerComponent implements OnInit {
             }
         }
     }
-    //create review table
-    createReviewTable() {
-        document.getElementById('div-02');
-        //name bold
-        //rating
-        //comment
-        //date
+
+    // curl --request GET \
+    //  --url 'https://api.yelp.com/v3/businesses/business_id_or_alias/reviews?limit=20&sort_by=yelp_sort' \
+    //  --header 'accept: application/json'
+    // B3FleeBQX8tsgBhMwdFXLQ
+    async callReviewAPI(bid: string) {
+        //https://api.yelp.com/v3/businesses/_n-F9OKGHcfaC8Fs9NZKag/reviews?limit=20&sort_by=yelp_sort
+        //nodeJS server IP
+        let url = 'https://api.yelp.com/v3/businesses/'+bid+'/reviews?sort_by=yelp_sort&limit=50';
+        await fetch('http://127.0.0.1:3000/getYelpSearch', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "url": url
+            })
+        })
+        .then(response => response.json())
+        .then(response => {
+            globalThis.jsonReviewText = JSON.stringify(response);
+            console.log(typeof (response));
+            return response;
+        })
+        .then(response => this.getReveiew(response));
+        console.log('---- come out ----');
+        let jojo = JSON.parse(globalThis.jsonReviewText);
+        console.log(typeof (jojo));
+        console.log(jojo.total);
+        // console.log(jsonObjArray[0].total);
+        let left = jojo.total - jojo.reviews.length, start = 50;
+        console.log('left: ' + left);
+        // API bug here !!!
+        // if (left > 0) {
+        //     while (left) {
+        //         console.log(left);
+        //         await fetch('http://127.0.0.1:3000/getYelpSearch', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Accept': 'application/json',
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({
+        //                 "url": url + '&offset=' + start
+        //             })
+        //         })
+        //             .then(response => response.json())
+        //             .then(response => this.getReveiew(response))
+        //             .then(response => {
+        //                 start += jojo.reviews.length;
+        //                 let job = JSON.parse(globalThis.jsonReveiewStrArray[jsonReveiewStrArray.length - 1]);
+        //                 left -= job.reviews.length;
+        //             });
+        //     }
+        // }
+        this.createReviewTable(bid);
     }
+    //create review table
+    createReviewTable(bid: string) {
+        console.log('enter to createReserveTable');
+        //store json obj into data array
+        var len = globalThis.jsonReveiewStrArray.length;
+        console.log(len);
+
+        let data: any[] = [];
+        if (len === 0) {
+            let title = document.createElement('h1') as HTMLElement;
+            title!.textContent = "No reviews yet";
+            title.style.color = "red";
+            title.style.textAlign = "center";
+            let tmp = document.getElementById("Reviews") as HTMLElement;
+            tmp.appendChild(title);
+            return;
+        }
+        // no, business name, date, time, email, delet button
+        var table = document.createElement('table');
+        table.setAttribute("id", "reviewsTable");
+        var tr = document.createElement('tr');
+        //var td1 = document.createElement('td');
+        tr.classList.add("arow");
+
+
+        table.appendChild(tr);
+        console.log('before creating table ...');
+        console.log('data length is ' + len);
+        for (let i = 0; i < len; i++) {
+            console.log(jsonReveiewStrArray[i]);
+            let jobj = JSON.parse(jsonReveiewStrArray[i]);
+            tr = document.createElement('tr');
+            tr.classList.add("arow");
+            //name bold
+            //rating
+            //comment
+            //date
+            console.log(jobj.reviews[i].user);
+            console.log(jobj.reviews[i].user.name);
+            let name = document.createElement('h5');
+            name.innerHTML = jobj.reviews[i].user.name;
+            let ratingt = document.createElement('p');
+            ratingt.innerHTML = 'Rating: ' + jobj.reviews[i].rating; 
+            let comment = document.createElement('p');
+            comment.innerHTML = jobj.reviews[i].text;
+            let date = document.createElement('p');
+            date.innerHTML = jobj.reviews[i].time_created;
+
+            tr.appendChild(name);
+            tr.appendChild(ratingt);
+            tr.appendChild(comment);
+            tr.appendChild(date);
+
+            table.appendChild(tr);
+        }
+        console.log('after creating table ...');
+        let tmp = document.getElementById("Reviews") as HTMLElement;
+        console.log(tmp);
+        tmp.appendChild(table);
+    }
+
 }
