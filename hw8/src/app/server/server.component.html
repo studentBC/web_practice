@@ -26,7 +26,7 @@
       <h2>Fill out the form to get businesses near you!</h2>
       <form style="color:blue;" (ngSubmit)="submitlol(form)" #form="ngForm">
         <label>Keyword</label><label style="color:red;">*</label><br>
-        <input type="text" ngModel name="kw" required>
+        <input type="text" class="form-control basicAutoComplete" ngModel name="kw" required>
         <br><br>
         <div class="twoBox">
           <div>
@@ -65,6 +65,8 @@
     </div>
   </div>
   <div id="searchResult" class="searchResult">
+    <button type="button" class="btn" id="previousPage" (click)="createAPIresultTable()"><span
+        class="bi bi-arrow-left"></span></button>
     <h1 style="text-align: center;" id="currentBU"></h1>
     <ul class="nav nav-tabs">
       <li class="nav-item">
@@ -102,7 +104,7 @@
     <div class="promotionBut" id="promotionBut">
       <div class="restButton">
         <!-- use either (click)="openModal() or data-bs-target="#reserveModal" here" -->
-        <button class="resBut" data-bs-toggle="modal" (click)="openModal()" >Reserve
+        <button class="resBut" data-bs-toggle="modal" (click)="openModal()">Reserve
           now</button>
         <button style="display:none;" id="realOpen" data-bs-toggle="modal" data-bs-target="#reserveModal"></button>
       </div>
@@ -118,10 +120,11 @@
       </div>
     </div>
     <!-- carousel -->
-    <div id="carouselExampleControls" class="carousel slide d-flex justify-content-center" data-bs-touch="false" data-bs-interval="false">
+    <div id="carouselExampleControls" class="carousel slide d-flex justify-content-center" data-bs-touch="false"
+      data-bs-interval="false">
       <div class="carousel-inner" id="carousel-inner">
         <div class="carousel-item active">
-          <img src="https://i.redd.it/dufdflg7nw5a1.jpg" class="d-block img-fluid img-thumbnail mx-auto" >
+          <img src="https://i.redd.it/dufdflg7nw5a1.jpg" class="d-block img-fluid img-thumbnail mx-auto">
         </div>
         <div class="carousel-item">
           <img src="https://i.redd.it/eo6fkw9o5maa1.jpg" class="d-block img-fluid img-thumbnail mx-auto">
@@ -130,11 +133,13 @@
           <img src="https://i.redd.it/dufdflg7nw5a1.jpg" class="d-block img-fluid img-thumbnail mx-auto">
         </div>
       </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+        data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+        data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
@@ -143,16 +148,15 @@
       <!--Google map-->
       <div class="container-fluid">
         <div class="map-responsive">
-          <iframe
-            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=Eiffel+Tower+Paris+France"
-            width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+          <iframe src=""
+            width="600" height="450" frameborder="0" style="border:0" allowfullscreen id="GMap"></iframe>
         </div>
       </div>
       <!--Google Maps-->
     </section>
 
     <section id="Reviews" style="display: none; background-color: aliceblue;">
-      
+
     </section>
   </div>
   <!-- Modal -->
@@ -212,7 +216,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="reset" class="btn btn-dark" data-bs-dismiss="modal" (click)="form.resetForm();onCloseHandled()">Close</button>
+          <button type="reset" class="btn btn-dark" data-bs-dismiss="modal"
+            (click)="form.resetForm();onCloseHandled()">Close</button>
         </div>
       </div>
     </div>

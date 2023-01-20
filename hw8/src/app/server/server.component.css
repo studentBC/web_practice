@@ -187,7 +187,10 @@ body {
   text-align: center;
   background-color: transparent;
 }
-
+#previousPage {
+  align-self: flex-start;
+  background-color: aliceblue;
+}
 .restButton {
   display: flex;
   align-items: center;

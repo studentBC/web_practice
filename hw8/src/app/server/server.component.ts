@@ -5,8 +5,8 @@ import { NONE_TYPE } from "@angular/compiler";
 import { ModalModule, BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 declare global {
-    var lat: 0;
-    var long: 0;
+    var lat: number;
+    var long: number;
     var res: 0;
     var jsobj: object;
     var reserveNo: number;
@@ -31,6 +31,7 @@ declare global {
     //debug usage
     var debug: boolean;
     var reserveModal: ElementRef;
+    var gMLoc: string;
 }
 
 @Component({
@@ -89,6 +90,12 @@ export class ServerComponent implements OnInit {
         }
         globalThis.bDetail.set(jobj.id, tmp);
 
+    }
+    showPosition(position: any) {
+        globalThis.lat = position.coords.latitude;
+        globalThis.long = position.coords.longitude;
+        console.log(globalThis.lat);
+        console.log(globalThis.long);
     }
     ///////////////// deal with UI click /////////////////
     clickTab(id: string) {
@@ -232,7 +239,7 @@ export class ServerComponent implements OnInit {
     //     console.log(lat);
     //     console.log(long);
     // }
-    submitlol(form: NgForm): void {
+    submitlol(form: NgForm) {
         // console.log(event);
         //form submit will refresh my page and clear log
         // event.preventDefault();
@@ -259,43 +266,57 @@ export class ServerComponent implements OnInit {
             alert("you has not enter all required info!");
             return;
         }
+        let url = "";
         if (selfLocate) {
             if (navigator.geolocation) {
                 alert('selfLocate checked!');
-                //navigator.geolocation.getCurrentPosition(showPosition);
+                console.log('===   we have bug here for async problem   ===');
+                navigator.geolocation.getCurrentPosition(this.showPosition);
+                console.log('===   come outside   ===');
+                // globalThis.lat = res.results[0].geometry.location.lat;
+                // globalThis.long = res.results[0].geometry.location.lng;
+                globalThis.gMLoc = '&center=' + globalThis.long + ',' + globalThis.lat;
+                url = 'https://api.yelp.com/v3/businesses/search?term=' + kw + '&latitude=' + globalThis.lat + '&longitude=' + globalThis.long +
+                    '&categories=' + fc + '&radius=' + dist + '&limit=50';
             } else {
                 alert("Geolocation is not supported by this browser.");
             }
         } else {
-            if (!globalThis.debug) {
-                loc = loc.replace(/\s+/g, '+');
-                var gkey = '';
-                var gr = this.httpGet('https://maps.googleapis.com/maps/api/geocode/json?address=' + loc + '&key=' + gkey);
-                //call python get method to get the address
-                var res = JSON.parse(gr);
-                globalThis.lat = res.results[0].geometry.location.lat;
-                globalThis.long = res.results[0].geometry.location.lng;
-            }
+            //if (!globalThis.debug) {
+            globalThis.gMLoc = loc.replace(/\s+/g, '+');
+            var gkey = 'AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc';
+            var gr = this.httpGet('https://maps.googleapis.com/maps/api/geocode/json?address=' + loc + '&key=' + gkey);
+            //call python get method to get the address
+            var res = JSON.parse(gr);
+            url = 'https://api.yelp.com/v3/businesses/search?limit=50' + '&term=' + kw + '&location=' + loc;
+            //}
         }
         //call YELP https://docs.developer.yelp.com/reference/v3_business_search
         //let url = 'https://api.yelp.com/v3/businesses/search?term=delis&latitude=37.786882&longitude=-122.399972&offset=20&limit=50';
-        let url = "";
-        if (globalThis.debug) {
-            url = 'https://api.yelp.com/v3/businesses/search?term=delis&location=Austin&limit=50'
-        } else {
-            url = 'https://api.yelp.com/v3/businesses/search?term=' + kw + '&latitude=' + lat + '&longitude=' + long +
-                '&categories=' + fc + '&radius=' + dist + '&limit=50';
-        }
+
+        // if (globalThis.debug) {
+        //     url = 'https://api.yelp.com/v3/businesses/search?term=delis&location=Austin&limit=50'
+        // } else {
+        // url = 'https://api.yelp.com/v3/businesses/search?term=' + kw + '&latitude=' + lat + '&longitude=' + long +
+        //     '&categories=' + fc + '&radius=' + dist + '&limit=50';
+        //}
+        console.log('-------- the url is --------');
+        console.log(url);
+        console.log(globalThis.lat);
+        console.log(globalThis.long);
+        console.log('-----------------------------');
         this.callAPI(url);
     }
     ///////////// dynamically deal with webUI ///////////////
     createAPIresultTable() {
         console.log('enter to createAPIresultTable');
+        let resultTable = document.getElementsByClassName("APIresult");
+        //return;
         //store json obj into data array
         var len = jsonObjArray.length;
         console.log(len);
         let data: any[] = [];
-        if (len > 0) {
+        if (len > 0 && resultTable.length === 1) {
             console.log('enter to creat !!!');
             const elems = document.getElementsByClassName("APIresult");
             for (let i = 0; i < elems.length; i++) {
@@ -523,6 +544,9 @@ export class ServerComponent implements OnInit {
                 }
             }
         }
+        //deal with google map tab
+        let gm = document.getElementById('GMap') as HTMLIFrameElement;
+        gm.src = "https://www.google.com/maps/embed/v1/place?key=AIzaSyA0s1a7phLN0iaD6-UE7m4qP-z21pH0eSc&q=" + name + '+' + globalThis.gMLoc;
         //deal with review tab
         let nn = globalThis.nameToUID.get(name)?.toString()!;
         this.callImgAPI(nn);
@@ -546,7 +570,7 @@ export class ServerComponent implements OnInit {
             //delete selected reservation
             const header = document.getElementById('currentBU') as HTMLElement;
             let name = header.innerHTML;
-            console.log('***  going to cancel '+ name + '   ***');
+            console.log('***  going to cancel ' + name + '   ***');
             this.delReserv(name);
             //close and clear modal
             this.onCloseHandled();
