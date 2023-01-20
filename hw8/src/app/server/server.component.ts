@@ -27,6 +27,10 @@ declare global {
     var jsonReviewText: string;
     var jsonReveiewStrArray: string[];
     var nameToUID: Map<string, string>;
+    var bDetail: Map<string, string[]>;
+    //debug usage
+    var debug: boolean;
+    var reserveModal: ElementRef;
 }
 
 @Component({
@@ -37,7 +41,13 @@ declare global {
 
 export class ServerComponent implements OnInit {
     /////////////// inital variable realted ////////////
-    @ViewChild('reserveModal') reserveModal: any
+    //https://stackoverflow.com/questions/39366981/viewchild-in-ngif
+    //https://stackblitz.com/edit/angular-t5dfp7?file=app%2Fservice-component.ts
+    @ViewChild('reserveModal') set content(content: ElementRef) {
+        console.log(globalThis.reserveModal);
+        console.log(globalThis.reserveModal.nativeElement);
+        if (content) globalThis.reserveModal = content;
+    }
     ngOnInit(): void {
         globalThis.ascending = true;
         globalThis.jsonObjArray = [];
@@ -47,11 +57,14 @@ export class ServerComponent implements OnInit {
         globalThis.clickedBN = "lol";
         globalThis.reserveNo = 1;
         globalThis.db = new Map<string, string[]>();
+        globalThis.bDetail = new Map<string, string[]>();
         globalThis.nameToUID = new Map<string, string>();
+        globalThis.debug = true;
     }
     constructor(private http: HttpClient) {
 
     }
+
     initial(jojo: object) {
         console.log(typeof (jojo));
         console.log(jojo);
@@ -59,8 +72,23 @@ export class ServerComponent implements OnInit {
         globalThis.jsonObjArray.push(jojo);
         globalThis.jsonStrArray.push(JSON.stringify(jojo));
     }
-    getReveiew (jojo: object) {
+    getReveiew(jojo: object) {
         globalThis.jsonReveiewStrArray.push(JSON.stringify(jojo));
+    }
+    getBinfo(jojo: object) {
+        let jobj = JSON.parse(JSON.stringify(jojo));
+        if (jobj.id in globalThis.bDetail.keys) return;
+        let tmp: string[] = [];
+        //photos , daily open hours
+
+        for (let i = 0; i < jobj.photos.length; i++) {
+            tmp.push(jobj.photos[i]);
+        }
+        for (let i = 0; i < jobj.hours.open; i++) {
+            tmp.push(jobj.hours.open[i].start + ':' + jobj.hours.open[i].end);
+        }
+        globalThis.bDetail.set(jobj.id, tmp);
+
     }
     ///////////////// deal with UI click /////////////////
     clickTab(id: string) {
@@ -172,7 +200,7 @@ export class ServerComponent implements OnInit {
         console.log(jojo.total);
         // console.log(jsonObjArray[0].total);
         let left = jojo.total - jojo.businesses.length, start = 50;
-        if (left > 0) {
+        if (left > 0 && !globalThis.debug) {
             while (left) {
                 console.log(left);
                 await fetch('http://127.0.0.1:3000/getYelpSearch', {
@@ -224,7 +252,6 @@ export class ServerComponent implements OnInit {
         console.log(selfLocate);
         console.log(fc);
         console.log(dist);
-        let debug = true;
 
         if (!dist) dist = 10000;
         if (!fc) fc = "all";
@@ -240,7 +267,7 @@ export class ServerComponent implements OnInit {
                 alert("Geolocation is not supported by this browser.");
             }
         } else {
-            if (!debug) {
+            if (!globalThis.debug) {
                 loc = loc.replace(/\s+/g, '+');
                 var gkey = '';
                 var gr = this.httpGet('https://maps.googleapis.com/maps/api/geocode/json?address=' + loc + '&key=' + gkey);
@@ -253,7 +280,7 @@ export class ServerComponent implements OnInit {
         //call YELP https://docs.developer.yelp.com/reference/v3_business_search
         //let url = 'https://api.yelp.com/v3/businesses/search?term=delis&latitude=37.786882&longitude=-122.399972&offset=20&limit=50';
         let url = "";
-        if (debug) {
+        if (globalThis.debug) {
             url = 'https://api.yelp.com/v3/businesses/search?term=delis&location=Austin&limit=50'
         } else {
             url = 'https://api.yelp.com/v3/businesses/search?term=' + kw + '&latitude=' + lat + '&longitude=' + long +
@@ -439,6 +466,9 @@ export class ServerComponent implements OnInit {
             const ee = elems[i] as HTMLElement;
             ee.style.display = 'flex';
         }
+        //give searchResult a header
+        const header = document.getElementById('currentBU') as HTMLElement;
+        header.innerHTML = name;
 
         for (let a = 0; a < jsonObjArray.length; a++) {
             let jsobj = JSON.parse(jsonStrArray[a]);
@@ -486,6 +516,8 @@ export class ServerComponent implements OnInit {
                     let anchor = document.getElementById("minfo") as HTMLAnchorElement;
                     //var anchorText = document.createTextNode('Yelp');
                     anchor.href = jsobj.businesses[i].url;
+                    console.log("------- here -------");
+                    console.log(jsobj);
                     //anchor.setAttribute('href', jsobj.businesses[i].url);
                     break;
                 }
@@ -493,17 +525,41 @@ export class ServerComponent implements OnInit {
         }
         //deal with review tab
         let nn = globalThis.nameToUID.get(name)?.toString()!;
+        this.callImgAPI(nn);
         this.callReviewAPI(nn);
     }
     // handle modal 
     //https://stackoverflow.com/questions/59590391/bootstrap-modal-is-not-shown-on-angular-8-on-click
-    // openModal() {
-    //     console.log('enter to open');
-    //     // this.reserveModal.nativeElement.className = 'modal fade show';
-    //     this.reserveModal.show();
-    //     let tmp = document.getElementById('reserveModal');
-    //     // tmp.style.display = "contents";
-    // }
+    openModal() {
+        console.log('enter to open');
+        // this.reserveModal.nativeElement.className = 'modal fade show';
+        // this.reserveModal.open();
+        //let tmp = document.getElementById('reserveModal');
+        // tmp.style.display = "contents";
+        let but = document.getElementsByClassName("resBut")[0] as HTMLButtonElement;
+        console.log('------------------');
+        console.log(but.innerHTML[0]);
+        if (but.innerHTML[0] == 'C') {
+            but!.style.backgroundColor = "#d0451b";
+            but!.style.background = "linear-gradient(to bottom, #d0451b 5%, #bc3315 100%)";
+            but.innerHTML = "Reserve now";
+            //delete selected reservation
+            const header = document.getElementById('currentBU') as HTMLElement;
+            let name = header.innerHTML;
+            console.log('***  going to cancel '+ name + '   ***');
+            this.delReserv(name);
+            //close and clear modal
+            this.onCloseHandled();
+            return;
+        } else {
+            // console.log(globalThis.reserveModal);
+            // console.log(globalThis.reserveModal.nativeElement.getElementById('reserveModal'));
+            // if (!globalThis.reserveModal) console.log('fuck there is no use');
+            // else globalThis.reserveModal.nativeElement.click(); 
+            let tmpbut = document.getElementById('realOpen') as HTMLButtonElement;
+            tmpbut.click();
+        }
+    }
 
 
 
@@ -527,11 +583,31 @@ export class ServerComponent implements OnInit {
         console.log(date);
         console.log(hour);
         console.log(min);
+        let but = document.getElementsByClassName("resBut")[0] as HTMLButtonElement;
+        console.log('------------------');
+        console.log(but.innerHTML[0]);
+        if (but.innerHTML[0] == 'C') {
+            globalThis.reserveModal.nativeElement
+            but!.style.backgroundColor = "#d0451b";
+            but!.style.background = "linear-gradient(to bottom, #d0451b 5%, #bc3315 100%)";
+            but.innerHTML = "Reserve now";
+            //delete selected reservation
+            this.delReserv(name);
+            //close and clear modal
+            this.onCloseHandled();
+            return;
+        }
+        // console.log(form.value);
         globalThis.reserveNo++;
         console.log('we set db key: ' + name);
         globalThis.db.set(name, [no, name, date, hour, min, email]);
+        //turn reserve button to cancel button
+        but!.style.backgroundColor = "#019ad2";
+        but!.style.background = "linear-gradient(to bottom, #33bdef 5%, #019ad2 100%)";
+        but.innerHTML = "Cancel reservation";
         //close and clear modal
         this.onCloseHandled();
+        return;
     }
     ///////////// dynamically deal with reservation table ///////////////
     createReserveTable() {
@@ -600,6 +676,7 @@ export class ServerComponent implements OnInit {
         table.appendChild(tr);
         console.log('before creating table ...');
         console.log('data length is ' + len);
+        let no = 1;
         for (let [key, value] of db) {
             console.log(key + ' : ' + value + ' #### ');
             tr = document.createElement('tr');
@@ -621,7 +698,7 @@ export class ServerComponent implements OnInit {
             //td6.classList.add("glyphicon glyphicon-trash");
             td6.addEventListener("click", () => this.delReserv(key));
 
-            text1 = document.createTextNode(value[0]);
+            text1 = document.createTextNode(no.toString());
             text2 = document.createTextNode(value[1]);
             text3 = document.createTextNode(value[2]);
             text4 = document.createTextNode(value[3] + ':' + value[4]);
@@ -646,6 +723,7 @@ export class ServerComponent implements OnInit {
             tr.appendChild(td6);
 
             table.appendChild(tr);
+            no++;
         }
         console.log('after creating table ...');
         let tmp = document.getElementById("myBookingsTab") as HTMLElement;
@@ -659,8 +737,15 @@ export class ServerComponent implements OnInit {
         globalThis.db.delete(key);
         globalThis.reserveNo--;
         let table = document.getElementById("reserveTable") as HTMLTableElement;
-        console.log(table);
-        for (let i = 1; i < globalThis.reserveNo; i++) {
+        if (!table) {
+            db.delete(key);
+            return;
+        }
+        if (table.rows.length === 1) {
+            return;
+        }
+        console.log(table.rows.length);
+        for (let i = 1; i < table.rows.length; i++) {
             console.log(table.rows[i]);
             console.log(table.rows[i].cells[0].innerHTML);
             console.log(table.rows[i].cells[1].innerHTML);
@@ -670,15 +755,11 @@ export class ServerComponent implements OnInit {
             }
         }
     }
-
-    // curl --request GET \
-    //  --url 'https://api.yelp.com/v3/businesses/business_id_or_alias/reviews?limit=20&sort_by=yelp_sort' \
-    //  --header 'accept: application/json'
-    // B3FleeBQX8tsgBhMwdFXLQ
-    async callReviewAPI(bid: string) {
+    //it should include all business detail including open hour
+    async callImgAPI(bid: string) {
         //https://api.yelp.com/v3/businesses/_n-F9OKGHcfaC8Fs9NZKag/reviews?limit=20&sort_by=yelp_sort
         //nodeJS server IP
-        let url = 'https://api.yelp.com/v3/businesses/'+bid+'/reviews?sort_by=yelp_sort&limit=50';
+        let url = 'https://api.yelp.com/v3/businesses/' + bid;
         await fetch('http://127.0.0.1:3000/getYelpSearch', {
             method: 'POST',
             headers: {
@@ -689,13 +770,58 @@ export class ServerComponent implements OnInit {
                 "url": url
             })
         })
-        .then(response => response.json())
-        .then(response => {
-            globalThis.jsonReviewText = JSON.stringify(response);
-            console.log(typeof (response));
-            return response;
+            .then(response => response.json())
+            .then(response => this.getBinfo(response));
+        console.log('---- come out ----');
+        this.createCarouselImg(bid);
+    }
+    //create carousel img
+    createCarouselImg(bid: string) {
+        let inner = document.getElementById("carousel-inner") as HTMLElement;
+        let v = globalThis.bDetail.get(bid)!;
+        for (let i = 0; i < v!.length; i++) {
+            console.log(v![i]);
+            let dv = document.createElement('div');
+            dv.classList.add("carousel-item");
+            if (v[i][0] === 'h') {
+                let img = document.createElement('img');
+                //d-block img-fluid img-thumbnail mx-auto
+                img.classList.add("d-block");
+                img.classList.add("img-fluid");
+                img.classList.add("img-thumbnail");
+                img.classList.add("mx-auto");
+                img.src = v[i];
+                dv.appendChild(img);
+                inner.appendChild(dv);
+            } else break;
+        }
+        console.log('after creating table ...');
+    }
+    // curl --request GET \
+    //  --url 'https://api.yelp.com/v3/businesses/business_id_or_alias/reviews?limit=20&sort_by=yelp_sort' \
+    //  --header 'accept: application/json'
+    // B3FleeBQX8tsgBhMwdFXLQ
+    async callReviewAPI(bid: string) {
+        //https://api.yelp.com/v3/businesses/_n-F9OKGHcfaC8Fs9NZKag/reviews?limit=20&sort_by=yelp_sort
+        //nodeJS server IP
+        let url = 'https://api.yelp.com/v3/businesses/' + bid + '/reviews?sort_by=yelp_sort&limit=50';
+        await fetch('http://127.0.0.1:3000/getYelpSearch', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "url": url
+            })
         })
-        .then(response => this.getReveiew(response));
+            .then(response => response.json())
+            .then(response => {
+                globalThis.jsonReviewText = JSON.stringify(response);
+                console.log(typeof (response));
+                return response;
+            })
+            .then(response => this.getReveiew(response));
         console.log('---- come out ----');
         let jojo = JSON.parse(globalThis.jsonReviewText);
         console.log(typeof (jojo));
@@ -770,7 +896,7 @@ export class ServerComponent implements OnInit {
             let name = document.createElement('h5');
             name.innerHTML = jobj.reviews[i].user.name;
             let ratingt = document.createElement('p');
-            ratingt.innerHTML = 'Rating: ' + jobj.reviews[i].rating; 
+            ratingt.innerHTML = 'Rating: ' + jobj.reviews[i].rating;
             let comment = document.createElement('p');
             comment.innerHTML = jobj.reviews[i].text;
             let date = document.createElement('p');

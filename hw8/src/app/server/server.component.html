@@ -65,6 +65,7 @@
     </div>
   </div>
   <div id="searchResult" class="searchResult">
+    <h1 style="text-align: center;" id="currentBU"></h1>
     <ul class="nav nav-tabs">
       <li class="nav-item">
         <a class="nav-link" (click)="putMeUp('businessTab')" href="#businessTab" style="color: black;">Business
@@ -100,9 +101,10 @@
     </section>
     <div class="promotionBut" id="promotionBut">
       <div class="restButton">
-        <!-- take off (click)="openModal() here" -->
-        <button class="resBut" data-bs-toggle="modal" data-bs-target="#reserveModal">Reserve
+        <!-- use either (click)="openModal() or data-bs-target="#reserveModal" here" -->
+        <button class="resBut" data-bs-toggle="modal" (click)="openModal()" >Reserve
           now</button>
+        <button style="display:none;" id="realOpen" data-bs-toggle="modal" data-bs-target="#reserveModal"></button>
       </div>
       <div class="socialShare">
         <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button"
@@ -114,6 +116,28 @@
           allowfullscreen="true"
           allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
       </div>
+    </div>
+    <!-- carousel -->
+    <div id="carouselExampleControls" class="carousel slide d-flex justify-content-center" data-bs-touch="false" data-bs-interval="false">
+      <div class="carousel-inner" id="carousel-inner">
+        <div class="carousel-item active">
+          <img src="https://i.redd.it/dufdflg7nw5a1.jpg" class="d-block img-fluid img-thumbnail mx-auto" >
+        </div>
+        <div class="carousel-item">
+          <img src="https://i.redd.it/eo6fkw9o5maa1.jpg" class="d-block img-fluid img-thumbnail mx-auto">
+        </div>
+        <div class="carousel-item">
+          <img src="https://i.redd.it/dufdflg7nw5a1.jpg" class="d-block img-fluid img-thumbnail mx-auto">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
     <section id="Maplocation" style="display: none; background-color: aliceblue;">
       <!--Google map-->
@@ -169,15 +193,15 @@
                       <option value="17">17</option>
                     </select>
                     <select id="modalMinute" ngModel name="mmm" required>
-                      <option value="0">00</option>
-                      <option value="15">15</option>
-                      <option value="30">30</option>
-                      <option value="45">45</option>
+                      <option value=0>00</option>
+                      <option value=15>15</option>
+                      <option value=30>30</option>
+                      <option value=45>45</option>
                     </select>
                   </div>
                   <div class="form-group submit-container"
                     style="display: flex; align-items: center; justify-content: center;">
-                    <button type="submit" class="resBut" (click)="submitModal(ff)">
+                    <button type="submit" class="resBut" data-bs-dismiss="modal">
                       SUBMIT
                     </button>
                   </div>

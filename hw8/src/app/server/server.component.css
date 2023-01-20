@@ -200,9 +200,21 @@ body {
 .socialShare {
   display: flex;
   align-items: center;
-  justify-content: center;
-}
+  justify-content: space-evenly;
 
+}
+#carouselExampleControls {
+    max-width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.img-fluid{
+  max-width: 30%;
+}
+/* img {
+  img-fluid
+} */
 .resBut {
   box-shadow: inset 0px 0px 0px 0px #cf866c;
   background: linear-gradient(to bottom, #d0451b 5%, #bc3315 100%);
