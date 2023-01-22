@@ -47,13 +47,19 @@
       padding-bottom: 0.5em;
     }
 
+    body {
+      padding-left: 3vw;
+      padding-right: 3vw;
+    }
+
     table {
       width: 800px;
       text-align: center;
       border: 1px solid;
       /* margin-left: fixed;
       margin-right: fixed; */
-      margin-left: 27vw;
+      margin-left: auto;
+      margin-right: auto;
       /* margin-right: 500px; */
       padding-top: 3em;
       /* max-width: 100%; */
@@ -62,13 +68,9 @@
     }
 
     .HomePictures {
-	  margin-left: 3vw;
-      padding-left: 5vw;
-    }
-
-    .row>* {
-      width: unset;
-      height: unset;
+      margin-left: auto;
+      margin-right: auto;
+      width: 1300px;
     }
 
     th {
@@ -77,19 +79,19 @@
       text-align: center;
     }
 
-    img {
-      padding-top: 3;
-      margin-top: 3;
-      /* display: block; */
-      /* margin-left: 1em;
-      margin-right: 1em; */
-      /* max-width: 100%; */
-      width: 600px;
-      height: 600px;
+    .upmost {
+      padding-left: 3vw;
+      padding-right: 3vw;
     }
 
-    p {
-      text-align: center;
+    img {
+      width: 600px;
+      height: 600px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      margin-left: 10px;
+      margin-right: 10px;
+      display: inline-block;
     }
 
     .fa {
@@ -97,8 +99,9 @@
     }
 
     .logo {
-      text-align: center;
-	  padding-left: 30vw;
+      margin-left: auto;
+      margin-right: auto;
+      width: fit-content;
     }
 
     .flex-container {
@@ -117,57 +120,47 @@
 <body>
   <br>
   <br>
-  <table>
-    <tr>
-      <td style="padding-top:1em;">
-        <h1>James Jantz</h1>
-      </td>
-    </tr>
-    <tr>
-      <td class="telement">
-        <button onclick="showH()" style="color:black" id="hh">home </button>
-        &nbsp;&nbsp;
-        <button onclick="showN()" style="color:gray" id="nn">nature</button>
-        &nbsp;&nbsp;
-        <a style="color:gray">urban</a>
-        &nbsp;&nbsp;
-        <a style="color:gray">video</a>
-        &nbsp;&nbsp;
-        <a style="color:gray">bio</a>
-        &nbsp;&nbsp;
-        <a style="color:gray">photo albums</a>
-        &nbsp;&nbsp;
-        <a style="color:gray">book online</a>
-      </td>
-    </tr>
-  </table>
+  <div class="upmost">
+    <table>
+      <tr>
+        <td style="padding-top:1em;">
+          <h1>James Jantz</h1>
+        </td>
+      </tr>
+      <tr>
+        <td class="telement">
+          <button onclick="showH()" style="color:black" id="hh">home </button>
+          &nbsp;&nbsp;
+          <button onclick="showN()" style="color:gray" id="nn">nature</button>
+          &nbsp;&nbsp;
+          <a style="color:gray">urban</a>
+          &nbsp;&nbsp;
+          <a style="color:gray">video</a>
+          &nbsp;&nbsp;
+          <a style="color:gray">bio</a>
+          &nbsp;&nbsp;
+          <a style="color:gray">photo albums</a>
+          &nbsp;&nbsp;
+          <a style="color:gray">book online</a>
+        </td>
+      </tr>
+    </table>
+  </div>
   <br>
   <br>
-  <div class="HomePictures" style="display: show;">
-    <h5 id="subtitle" style="color: white;">Nature</h5>
-    <div class="row flex-nowrap  g-2">
-      <div class="col-6 flex-nowrap">
-        <img src="http://csci571.com/hw/hw3/images/pier.jpg" id="first">
-      </div>
-      <div class="col-6 flex-nowrap ">
-        <img src="http://csci571.com/hw/hw3/images/road.jpg" id="second">
-      </div>
-    </div>
-    <div class="row flex-nowrap g-2">
-      <div class="col-6 flex-nowrap">
-        <img src="http://csci571.com/hw/hw3/images/lake.jpg" id="third">
-      </div>
-      <div class="col-6 flex-nowrap">
-        <img src="http://csci571.com/hw/hw3/images/mountain.jpg" id="fourth">
-      </div>
-    </div>
+  <div class="HomePictures">
+    <h3 id="subtitle" style="color: white;">Nature</h3>
+    <img src="http://csci571.com/hw/hw3/images/pier.jpg" id="first">
+    <img src="http://csci571.com/hw/hw3/images/road.jpg" id="second">
+    <img src="http://csci571.com/hw/hw3/images/lake.jpg" id="third">
+    <img src="http://csci571.com/hw/hw3/images/mountain.jpg" id="fourth">
   </div>
   <br>
   <br>
   <br>
   <br>
   <br>
-  <p style="font-size:26px; padding-left: 30vw;">© 2023 by James Jantz</p>
+  <p style="font-size:26px; text-align: center;">© 2023 by James Jantz</p>
   <div class="logo">
     <a class="fa fa-facebook-f" style="font-size:24px"></a>
     <a class="fa fa-twitter" style="font-size:24px"></a>
