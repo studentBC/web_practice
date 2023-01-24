@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 struct submitContent {
     var kw: String
     var dist: String
@@ -14,7 +15,7 @@ struct submitContent {
     var Category: String
     
 }
-
+private var searchResultTable: [business] = []
 struct ContentView: View {
     @State var kw: String = ""
     @State var dist: String = ""
@@ -22,7 +23,6 @@ struct ContentView: View {
     @State var selection = "Default"
     @State var selfLocate = false
     let categories = ["Default", "Arts & Entertainment", "Health & Medical", "Hotels & Travel", "Food","Professional Service"]
-    private var searchResultTable = [business.self]
     var body: some View {
         // A cell that, when selected, adds a new folder.
         // reserve seat logo
@@ -85,11 +85,60 @@ struct ContentView: View {
 }
 func goSearch(suc: submitContent) async {
     print(suc.loc, suc.dist, suc.kw, suc.Category)
+    let key = "Bearer 14KXrZ0B_akWx-QGszPZVHBNMj2PKWHxd5FMjNVDHQ5Re_fY1fnJWcSijh66KHdu0Zon6yxIyGXiauJvKaTO29TGAcQJ4TzAYwBXMhvzPnqcIltOaIQxQdwSnge7Y3Yx"
     //send url to API
-    let url = URL(string: "https://reqres.in/api/cupcakes")!
-    var request = URLRequest(url: url)
+//    let url = URL(string: "https://reqres.in/api/cupcakes")!
+//    var request = URLRequest(url: url)
+
+    let request = NSMutableURLRequest(url: URL(string: "'https://api.yelp.com/v3/businesses/search?limit=50&term=\(suc.kw)&location=\(suc.loc)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!)
+    request.setValue(key, forHTTPHeaderField: "Authorization")
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    request.httpMethod = "POST"
+    request.httpMethod = "GET"
+    // fetch data
+    URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
+        guard let httpResponse = response as? HTTPURLResponse else { return }
+        
+        if httpResponse.statusCode == 200 {
+            // Http success
+            do {
+                // save json as an object
+                let jobj = try JSONDecoder().decode(bEntity.self , from: data!)
+//                var name: String = ""
+//                var rating: String = ""
+//                var id: String = ""
+//                var imageURL: String = ""
+//                var distance: String = ""
+
+                for bn in jobj.businesses {
+                    let tmp = business()
+                    tmp.id = bn.id
+                    tmp.imageURL = bn.imageURL
+                    tmp.distance = String(format: "%.1f", bn.distance)
+                    tmp.rating = String(format: "%.1f", bn.rating)
+                    searchResultTable.append(tmp)
+                }
+//
+//                DispatchQueue.main.async {
+//                    self.autoSuggestTableViewController.tableView.reloadData()
+//                }
+
+                
+            } catch DecodingError.dataCorrupted(let context) {
+                print(context.debugDescription)
+            } catch DecodingError.keyNotFound(let key, let context) {
+                print("\(key.stringValue) was not found, \(context.debugDescription)")
+            } catch DecodingError.typeMismatch(let type, let context) {
+                print("\(type) was expected, \(context.debugDescription)")
+            } catch DecodingError.valueNotFound(let type, let context) {
+                print("no value was found for \(type), \(context.debugDescription)")
+            } catch let error {
+                print(error)
+            }
+        } else {
+            // Http error
+        }
+        
+    }.resume()
 }
 func reserve() {
     

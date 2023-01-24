@@ -16,6 +16,7 @@
 		AF882B15297DC134004E7099 /* HW9UIUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF882B14297DC134004E7099 /* HW9UIUITestsLaunchTests.swift */; };
 		AF882B24297DC69A004E7099 /* model.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF882B23297DC69A004E7099 /* model.swift */; };
 		AF882B28297DF4E8004E7099 /* business.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF882B27297DF4E8004E7099 /* business.swift */; };
+		AF98BA35297FA6D300089106 /* BusinessJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF98BA34297FA6D300089106 /* BusinessJSON.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		AF882B14297DC134004E7099 /* HW9UIUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HW9UIUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		AF882B23297DC69A004E7099 /* model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = model.swift; sourceTree = "<group>"; };
 		AF882B27297DF4E8004E7099 /* business.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = business.swift; sourceTree = "<group>"; };
+		AF98BA34297FA6D300089106 /* BusinessJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessJSON.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 			children = (
 				AF882B23297DC69A004E7099 /* model.swift */,
 				AF882B27297DF4E8004E7099 /* business.swift */,
+				AF98BA34297FA6D300089106 /* BusinessJSON.swift */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 			files = (
 				AF882AFA297DC134004E7099 /* ContentView.swift in Sources */,
 				AF882B28297DF4E8004E7099 /* business.swift in Sources */,
+				AF98BA35297FA6D300089106 /* BusinessJSON.swift in Sources */,
 				AF882B24297DC69A004E7099 /* model.swift in Sources */,
 				AF882AF8297DC134004E7099 /* HW9UIApp.swift in Sources */,
 			);
