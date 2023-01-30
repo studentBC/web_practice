@@ -11,6 +11,7 @@ class apiSearchModel {
     init() {
         
     }
+    
     func searchEvent (ss: String, completion: @escaping(eventSearch?)->()) {
         guard let url = URL(string: "https://app.ticketmaster.com/discovery/v2/events.json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ"+ss) else {
             completion(nil);
@@ -18,7 +19,7 @@ class apiSearchModel {
         }
         URLSession.shared.dataTask(with: url) {
             data, response, error in
-            guard let data = data, error == nil else {
+            guard let res = data, error == nil else {
                 completion(nil);
                 return;
             }
@@ -29,7 +30,11 @@ class apiSearchModel {
                 return
             }
             print("our url is \(url)")
-            let es = try? JSONDecoder().decode(eventSearch.self, from: data);
+            
+            let es = try? JSONDecoder().decode(eventSearch.self, from: res);
+            print("try to get links")
+            print(es?.links)
+            print(es?.embedded)
             if let events = es {
                 completion(events);
             } else {

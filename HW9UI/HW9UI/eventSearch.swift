@@ -1,10 +1,3 @@
-//
-//  eventSearch.swift
-//  HW9UI
-//
-//  Created by Chin Lung on 1/29/23.
-//
-
 // This file was generated from JSON Schema using quicktype, do not modify it directly.
 // To parse the JSON, add this file to your project and do:
 //
@@ -14,8 +7,8 @@ import Foundation
 
 // MARK: - Welcome
 struct eventSearch: Codable {
-    let embedded: embedded
-    let links: links
+    let embedded: Embedded
+    let links: Links
     let page: Page
 
     enum CodingKeys: String, CodingKey {
@@ -26,12 +19,12 @@ struct eventSearch: Codable {
 }
 
 // MARK: - WelcomeEmbedded
-struct embedded: Codable {
+struct Embedded: Codable {
     let events: [Event]
 }
 
 // MARK: - Event
-struct Event: Codable, Identifiable {
+struct Event: Codable {
     let name: String
     let type: EventType
     let id: String
@@ -44,52 +37,53 @@ struct Event: Codable, Identifiable {
     let classifications: [Classification]
     let promoter: Promoter?
     let promoters: [Promoter]?
-    let pleaseNote: String?
+    let info, pleaseNote: String?
     let priceRanges: [PriceRange]?
-    let products: [Product]?
-    let seatmap: Seatmap
+    let seatmap: Seatmap?
     let accessibility: Accessibility?
-    let ticketLimit: TicketLimit?
     let ageRestrictions: AgeRestrictions?
     let ticketing: Ticketing?
     let links: EventLinks
     let embedded: EventEmbedded
-    let info: String?
     let outlets: [Outlet]?
-    let doorsTimes: DoorsTimes?
+    let description: String?
+    let place: Place?
+    let products: [Product]?
+    let ticketLimit: TicketLimit?
 
     enum CodingKeys: String, CodingKey {
-        case name, type, id, test, url, locale, images, sales, dates, classifications, promoter, promoters, pleaseNote, priceRanges, products, seatmap, accessibility, ticketLimit, ageRestrictions, ticketing
+        case name, type, id, test, url, locale, images, sales, dates, classifications, promoter, promoters, info, pleaseNote, priceRanges, seatmap, accessibility, ageRestrictions, ticketing
         case links = "_links"
         case embedded = "_embedded"
-        case info, outlets, doorsTimes
+        case outlets, description, place, products, ticketLimit
     }
 }
 
 // MARK: - Accessibility
 struct Accessibility: Codable {
-    let info: String?
     let ticketLimit: Int?
+    let info: String?
 }
 
 // MARK: - AgeRestrictions
 struct AgeRestrictions: Codable {
     let legalAgeEnforced: Bool
-    let ageRuleDescription: String?
 }
 
 // MARK: - Classification
 struct Classification: Codable {
     let primary: Bool
     let segment, genre, subGenre: Genre
-    let type, subType: Genre?
     let family: Bool
+    let type, subType: Genre?
 }
 
 // MARK: - Genre
 struct Genre: Codable {
-    let id, name: String
+    let id: String
+    let name: String
 }
+
 
 // MARK: - Dates
 struct Dates: Codable {
@@ -97,12 +91,33 @@ struct Dates: Codable {
     let timezone: String?
     let status: Status
     let spanMultipleDays: Bool
+    let access: Access?
+    let end: End?
+    let initialStartDate: InitialStartDate?
+}
+
+// MARK: - Access
+struct Access: Codable {
+    let startApproximate, endApproximate: Bool
+}
+
+// MARK: - End
+struct End: Codable {
+    let localDate, localTime: String?
+    let dateTime: String?
+    let approximate, noSpecificTime: Bool
+}
+
+// MARK: - InitialStartDate
+struct InitialStartDate: Codable {
+    let localDate, localTime: String?
+    let dateTime: String?
 }
 
 // MARK: - Start
 struct Start: Codable {
-    let localDate, localTime: String
-    let dateTime: Date
+    let localDate, localTime: String?
+    let dateTime: String?
     let dateTBD, dateTBA, timeTBA, noSpecificTime: Bool
 }
 
@@ -112,19 +127,15 @@ struct Status: Codable {
 }
 
 enum Code: String, Codable {
+    case offsale = "offsale"
     case onsale = "onsale"
-}
-
-// MARK: - DoorsTimes
-struct DoorsTimes: Codable {
-    let localDate, localTime: String
-    let dateTime: Date
+    case rescheduled = "rescheduled"
 }
 
 // MARK: - EventEmbedded
 struct EventEmbedded: Codable {
-    let venues: [Venue]
-    let attractions: [Attraction]
+    let venues: [Venue]?
+    let attractions: [Attraction]?
 }
 
 // MARK: - Attraction
@@ -133,26 +144,27 @@ struct Attraction: Codable {
     let type: AttractionType
     let id: String
     let test: Bool
-    let url: String
     let locale: Locale
-    let externalLinks: ExternalLinks?
     let images: [Image]
     let classifications: [Classification]
     let upcomingEvents: UpcomingEvents
     let links: AttractionLinks
-    let aliases: [String]?
+    let url: String?
+    let externalLinks: ExternalLinks?
 
     enum CodingKeys: String, CodingKey {
-        case name, type, id, test, url, locale, externalLinks, images, classifications, upcomingEvents
+        case name, type, id, test, locale, images, classifications, upcomingEvents
         case links = "_links"
-        case aliases
+        case url, externalLinks
     }
 }
 
 // MARK: - ExternalLinks
 struct ExternalLinks: Codable {
-    let twitter, wiki, facebook, instagram: [Facebook]
-    let homepage: [Facebook]
+    let facebook, homepage: [Facebook]?
+    let youtube, itunes, wiki, spotify: [Facebook]?
+    let musicbrainz: [Musicbrainz]?
+    let instagram, twitter, lastfm: [Facebook]?
 }
 
 // MARK: - Facebook
@@ -160,19 +172,17 @@ struct Facebook: Codable {
     let url: String
 }
 
-// MARK: - Image
-struct Image: Codable {
-    let ratio: Ratio?
-    let url: String
-    let width, height: Int
-    let fallback: Bool
-    let attribution: String?
+// MARK: - Musicbrainz
+struct Musicbrainz: Codable {
+    let id: String
 }
 
-enum Ratio: String, Codable {
-    case the16_9 = "16_9"
-    case the3_2 = "3_2"
-    case the4_3 = "4_3"
+// MARK: - Image
+struct Image: Codable {
+    let ratio: String?
+    let url: String
+    let width, height: Int?
+    let fallback: Bool?
 }
 
 // MARK: - AttractionLinks
@@ -190,6 +200,7 @@ struct First: Codable {
 }
 
 enum Locale: String, Codable {
+    case enDe = "en-de"
     case enUs = "en-us"
 }
 
@@ -197,33 +208,100 @@ enum AttractionType: String, Codable {
     case attraction = "attraction"
 }
 
+// MARK: - UpcomingEvents
+struct UpcomingEvents: Codable {
+    let total: Int
+    let tmr: Int?
+    let filtered: Int
+    let ticketmaster, moshtix, mfxBe: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case total = "_total"
+        case tmr
+        case filtered = "_filtered"
+        case ticketmaster, moshtix
+        case mfxBe = "mfx-be"
+    }
+}
+
+// MARK: - Venue
+struct Venue: Codable {
+    let name: String
+    let type: VenueType
+    let id: String
+    let test: Bool
+    let url: String?
+    let locale: Locale
+    let postalCode: String
+    let timezone: String
+    let city: Place
+    let state: SState?
+    let country: Country
+    let address: Address
+    let location: Location
+    let markets: [Genre]?
+    let dmas: [DMA]?
+    let upcomingEvents: UpcomingEvents
+    let links: AttractionLinks
+    let images: [Image]?
+    let boxOfficeInfo: BoxOfficeInfo?
+    let parkingDetail: String?
+    let generalInfo: GeneralInfo?
+    let ada: Ada?
+    let accessibleSeatingDetail: String?
+    let social: Social?
+    let aliases: [String]?
+
+    enum CodingKeys: String, CodingKey {
+        case name, type, id, test, url, locale, postalCode, timezone, city, state, country, address, location, markets, dmas, upcomingEvents
+        case links = "_links"
+        case images, boxOfficeInfo, parkingDetail, generalInfo, ada, accessibleSeatingDetail, social, aliases
+    }
+}
 
 // MARK: - Ada
 struct Ada: Codable {
     let adaPhones, adaCustomCopy, adaHours: String
 }
 
+// MARK: - Address
+struct Address: Codable {
+    let line1: String?
+    let line2: String?
+}
+
 // MARK: - BoxOfficeInfo
 struct BoxOfficeInfo: Codable {
-    let phoneNumberDetail, openHoursDetail: String
-    let willCallDetail, acceptedPaymentDetail: String?
+    let phoneNumberDetail: String?
+    let openHoursDetail: String?
+    let acceptedPaymentDetail, willCallDetail: String?
 }
 
-enum CountryCode: String, Codable {
-    case us = "US"
+// MARK: - Place
+struct Place: Codable {
+    let name: String
 }
 
-enum CountryName: String, Codable {
-    case unitedStatesOfAmerica = "United States Of America"
+// MARK: - Country
+struct Country: Codable {
+    let name: String
+    let countryCode: String
 }
 
+// MARK: - DMA
+struct DMA: Codable {
+    let id: Int
+}
 
 // MARK: - GeneralInfo
 struct GeneralInfo: Codable {
-    let childRule: String
-    let generalRule: String?
+    let generalRule, childRule: String?
 }
 
+// MARK: - Location
+struct Location: Codable {
+    let longitude, latitude: String
+}
 
 // MARK: - Social
 struct Social: Codable {
@@ -235,6 +313,12 @@ struct Twitter: Codable {
     let handle: String
 }
 
+// MARK: - State
+struct SState: Codable {
+    let name: String
+    let stateCode: String
+}
+
 enum VenueType: String, Codable {
     case venue = "venue"
 }
@@ -242,66 +326,59 @@ enum VenueType: String, Codable {
 // MARK: - EventLinks
 struct EventLinks: Codable {
     let linksSelf: First
-    let attractions, venues: [First]
+    let venues, attractions: [First]?
 
     enum CodingKeys: String, CodingKey {
         case linksSelf = "self"
-        case attractions, venues
+        case venues, attractions
     }
 }
 
 // MARK: - Outlet
 struct Outlet: Codable {
     let url: String
-    let type: String
+    let type: OutletType
+}
+
+enum OutletType: String, Codable {
+    case tmMarketPlace = "tmMarketPlace"
+    case venueBoxOffice = "venueBoxOffice"
 }
 
 // MARK: - PriceRange
 struct PriceRange: Codable {
     let type: PriceRangeType
     let currency: Currency
-    let min: Double
-    let max: Int
+    let min, max: Double
 }
 
 enum Currency: String, Codable {
+    case cad = "CAD"
+    case gbp = "GBP"
+    case nzd = "NZD"
     case usd = "USD"
 }
 
 enum PriceRangeType: String, Codable {
     case standard = "standard"
+    case standardIncludingFees = "standard including fees"
 }
 
 // MARK: - Product
 struct Product: Codable {
     let name, id: String
     let url: String
-    let type: ProductType
+    let type: String
     let classifications: [Classification]
-}
-
-enum ProductType: String, Codable {
-    case parking = "Parking"
-    case specialEntry = "Special Entry"
-    case upsell = "Upsell"
 }
 
 // MARK: - Promoter
 struct Promoter: Codable {
     let id: String
-    let name: PromoterName
-    let description: Description
+    let name: String
+    let description: String?
 }
 
-enum Description: String, Codable {
-    case miscellaneousPromoterNtlUsa = "MISCELLANEOUS PROMOTER / NTL / USA"
-    case nbaRegularSeasonNtlUsa = "NBA REGULAR SEASON / NTL / USA"
-}
-
-enum PromoterName: String, Codable {
-    case miscellaneousPromoter = "MISCELLANEOUS PROMOTER"
-    case nbaRegularSeason = "NBA REGULAR SEASON"
-}
 
 // MARK: - Sales
 struct Sales: Codable {
@@ -316,16 +393,15 @@ struct Sales: Codable {
 
 // MARK: - Presale
 struct Presale: Codable {
-    let startDateTime, endDateTime: Date
+    let startDateTime, endDateTime: String?
     let name: String
-    let description: String?
 }
 
 // MARK: - Public
 struct Public: Codable {
-    let startDateTime: Date
+    let startDateTime: String?
     let startTBD, startTBA: Bool
-    let endDateTime: Date
+    let endDateTime: String?
 }
 
 // MARK: - Seatmap
@@ -357,7 +433,7 @@ enum EventType: String, Codable {
 }
 
 // MARK: - WelcomeLinks
-struct links: Codable {
+struct Links: Codable {
     let first, linksSelf, next, last: First
 
     enum CodingKeys: String, CodingKey {
@@ -365,4 +441,9 @@ struct links: Codable {
         case linksSelf = "self"
         case next, last
     }
+}
+
+// MARK: - Page
+struct Page: Codable {
+    let size, totalElements, totalPages, number: Int
 }

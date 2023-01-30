@@ -90,12 +90,12 @@ struct searchTableCell: View {
     let es: Event
     var body: some View{
         HStack {
-            Text(es.dates.start.localDate + "\n" + es.dates.start.localTime)
+            Text((es.dates.start.localDate ?? "") + "\n" + (es.dates.start.localTime ?? ""))
             AsyncImage(url: URL(string: es.images[0].url))
                 .frame(width: 100, height: 100)
             Text(es.name)
             Text(es.classifications[0].segment.name)
-            Text(es.embedded.venues[0].name)
+            Text((es.embedded.venues?[0].name)!)
         }
     }
 }
@@ -117,17 +117,19 @@ func goSearch(suc: submitContent) async {
     }
     
     let url = "&keyword=" + suc.kw + "&segmentId=" + sid + "&size=200&unit=miles&radius=" + suc.dist;
-    searchAPI.searchEvent(ss: url, completion: {
-        (searchResult) in
-        if (searchResult == nil) {
-            print("error occur when retrieve data from API")
-            return;
-        }
-        for i in 1...(searchResult?.embedded.events.count)! {
-            searchResultTable.append((searchResult?.embedded.events[i])!)
-        }
-        
-    })
+    getEventResults(url: url)
+//    searchAPI.searchEvent(ss: url, completion: {
+//        (searchResult) in
+//        if (searchResult == nil) {
+//            print("error occur when retrieve data from API")
+//            return;
+//        }
+//        print(searchResult?.embedded.events.count)
+//        for i in 0...((searchResult?.embedded.events.count)!-1) {
+//            searchResultTable.append((searchResult?.embedded.events[i])!)
+//        }
+//
+//    })
 }
 func reserve() {
     
@@ -137,16 +139,42 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-//extension ContentView: modelDelegate {
-//
-//    func didGetURL(url: String) {
-//
-//        DispatchQueue.main.async {
-//
-//        }
-//    }
-//
-//    func didFailWithError(error: Error) {
-//        print(error)
-//    }
-//}
+
+func getEventResults(url: String) {
+    print("enter to getEventResults")
+    let urlString = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ" + url
+
+    if let url = URL(string: urlString) {
+        
+        let session = URLSession(configuration: .default)
+        let task = session.dataTask(with: url) { (data, response, error) in
+            if error != nil {
+                print(error!)
+                return
+            }
+            
+            if let safeData = data {
+                
+                do {
+                    let searchResult = try JSONDecoder().decode(eventSearch.self, from: safeData);
+                    print("we should have data")
+                    if (searchResult.embedded.events.count == 0) {
+                        print("we should show no result here")
+                        return;
+                    }
+                    print("------ come come ------")
+                    print(searchResult.embedded.events.count)
+                    for i in 0...(searchResult.embedded.events.count-1) {
+                        print(i)
+                        searchResultTable.append((searchResult.embedded.events[i] as Event))
+                    }
+                } catch {
+                    print(error)
+                }
+                
+            }
+            
+        }
+        task.resume()
+    }
+}
