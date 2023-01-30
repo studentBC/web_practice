@@ -7,11 +7,66 @@
 
 import Foundation
 // check v38
-class apiSearchModel {
+class apiSearchModel: ObservableObject {
+    @Published var searchResultTable: [Event] = []
     init() {
         
     }
-    
+    func goSearch(suc: submitContent) async {
+        print(suc.loc, suc.dist, suc.kw, suc.Category)
+        var sid = ""
+        if (suc.Category == "Default"){
+            sid = "KZFzniwnSyZfZ7v7nJ,%20KZFzniwnSyZfZ7v7nE,%20KZFzniwnSyZfZ7v7na,%20KZFzniwnSyZfZ7v7nn,%20KZFzniwnSyZfZ7v7n1"
+        } else if (suc.Category == "Music") {
+            sid = "KZFzniwnSyZfZ7v7nJ"
+        } else if (suc.Category == "Sports") {
+            sid = "KZFzniwnSyZfZ7v7nE"
+        } else if (suc.Category == "Arts & Theatre") {
+            sid = "KZFzniwnSyZfZ7v7na"
+        } else if (suc.Category == "Film") {
+            sid = "KZFzniwnSyZfZ7v7nn"
+        } else {
+            sid = "KZFzniwnSyZfZ7v7n1"
+        }
+        
+        let url = "&keyword=" + suc.kw + "&segmentId=" + sid + "&size=200&unit=miles&radius=" + suc.dist;
+        print("enter to getEventResults")
+        let urlString = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ" + url
+
+        if let url = URL(string: urlString) {
+            
+            let session = URLSession(configuration: .default)
+            let task = session.dataTask(with: url) { (data, response, error) in
+                if error != nil {
+                    print(error!)
+                    return
+                }
+                
+                if let safeData = data {
+                    
+                    do {
+                        let searchResult = try JSONDecoder().decode(eventSearch.self, from: safeData);
+                        print("we should have data")
+                        if (searchResult.embedded.events.count == 0) {
+                            print("we should show no result here")
+                            return;
+                        }
+                        print("------ come come ------")
+                        print(searchResult.embedded.events.count)
+                        for i in 0...(searchResult.embedded.events.count-1) {
+                            print(i)
+                            self.searchResultTable.append((searchResult.embedded.events[i] as Event))
+                        }
+                    } catch {
+                        print(error)
+                    }
+                    
+                }
+                
+            }
+            task.resume()
+        }
+    }
     func searchEvent (ss: String, completion: @escaping(eventSearch?)->()) {
         guard let url = URL(string: "https://app.ticketmaster.com/discovery/v2/events.json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ"+ss) else {
             completion(nil);
