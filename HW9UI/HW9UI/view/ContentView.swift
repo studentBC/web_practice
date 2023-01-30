@@ -13,27 +13,28 @@ struct submitContent {
     var loc: String
     var selfLocate: Bool
     var Category: String
-    
+
 }
-private var searchResultTable: [business] = []
+private var searchResultTable: [Event] = []
+private var searchAPI = apiSearchModel()
 struct ContentView: View {
-    @State var kw: String = ""
-    @State var dist: String = ""
-    @State var loc: String = ""
-    @State var selection = "Default"
-    @State var selfLocate = false
-    let categories = ["Default", "Arts & Entertainment", "Health & Medical", "Hotels & Travel", "Food","Professional Service"]
+    @State private var kw: String = ""
+    @State private var dist: String = ""
+    @State private var loc: String = ""
+    @State private var selection: String = "Default"
+    @State private var selfLocate: Bool = false
+    let categories = ["Default", "Music", "Sports", "Arts & Theatre", "Film","Miscellaneous"]
     var body: some View {
         // A cell that, when selected, adds a new folder.
         // reserve seat logo
         
-        ZStack {
-            Button(action: reserve) {
+        VStack {
+            Button(action: reserve) { //maybe this one is navigation link on 12
                 Label("", systemImage: "calendar.badge.plus")
             }
             NavigationView {
                 Form {
-                    TextField("key word:", text: $kw)
+                    TextField("Key Word:", text: $kw)
                     TextField("Distance:", text: $dist)
                     Picker("Category", selection: $selection) {
                         ForEach(categories, id: \.self) {
@@ -43,14 +44,10 @@ struct ContentView: View {
                     .pickerStyle(.menu)
                     TextField("Address", text: $loc)
                     Toggle("auto detect my location", isOn: $selfLocate)
-
-                    if selfLocate {
-                        Text("Hello World!")
-                    }
                     HStack {
                         Button(action: {
                             Task {
-                                var sbc = submitContent(kw: kw, dist: dist, loc: loc, selfLocate: selfLocate, Category: selection)
+                                let sbc = submitContent(kw: kw, dist: dist, loc: loc, selfLocate: selfLocate, Category: selection)
                                 await goSearch(suc: sbc)
                             }
                         }) {
@@ -65,80 +62,72 @@ struct ContentView: View {
                         }.buttonStyle(.bordered)
                             .tint(.red)
                     }
-                }.navigationBarTitle("Business Search")
+                }.navigationBarTitle("Events Search")
             }
-            
             //https://www.ralfebert.com/ios-examples/uikit/uitableviewcontroller/
             //https://developer.apple.com/documentation/swiftui/table
-            let no = 1
-//            Table(searchResultTable) {
-//                TableColumn("No", no)
-//                TableColumn("Image", value: \.imageURL)
-//                TableColumn("Business Name", value: \.name)
-//                TableColumn("Rating", value: \.rating)
-//                TableColumn("Distance", value: \.distance)
-//                no+=1
+            //let no = 1
+            //https://www.appcoda.com/swiftui-first-look/
+//            UITableView tv;
+//            HStack {
+//                Table(searchResultTable) {
+//                    //TableColumn("No", no)
+//                    TableColumn("Image", value: \.imageURL)
+//                    TableColumn("Business Name", value: \.name)
+//                    TableColumn("Rating", value: \.rating)
+//                    TableColumn("Distance", value: \.distance)
+//                    //no+=1
+//                }
 //            }
+            List(searchResultTable, id: \.name) {
+                searchTableCell(es: $0)
+            }
             
+        }
+    }
+}
+struct searchTableCell: View {
+    let es: Event
+    var body: some View{
+        HStack {
+            Text(es.dates.start.localDate + "\n" + es.dates.start.localTime)
+            AsyncImage(url: URL(string: es.images[0].url))
+                .frame(width: 100, height: 100)
+            Text(es.name)
+            Text(es.classifications[0].segment.name)
+            Text(es.embedded.venues[0].name)
         }
     }
 }
 func goSearch(suc: submitContent) async {
     print(suc.loc, suc.dist, suc.kw, suc.Category)
-    let key = "Bearer 14KXrZ0B_akWx-QGszPZVHBNMj2PKWHxd5FMjNVDHQ5Re_fY1fnJWcSijh66KHdu0Zon6yxIyGXiauJvKaTO29TGAcQJ4TzAYwBXMhvzPnqcIltOaIQxQdwSnge7Y3Yx"
-    //send url to API
-//    let url = URL(string: "https://reqres.in/api/cupcakes")!
-//    var request = URLRequest(url: url)
-
-    let request = NSMutableURLRequest(url: URL(string: "'https://api.yelp.com/v3/businesses/search?limit=50&term=\(suc.kw)&location=\(suc.loc)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!)!)
-    request.setValue(key, forHTTPHeaderField: "Authorization")
-    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    request.httpMethod = "GET"
-    // fetch data
-    URLSession.shared.dataTask(with: request as URLRequest) { (data, response, error) in
-        guard let httpResponse = response as? HTTPURLResponse else { return }
-        
-        if httpResponse.statusCode == 200 {
-            // Http success
-            do {
-                // save json as an object
-                let jobj = try JSONDecoder().decode(bEntity.self , from: data!)
-//                var name: String = ""
-//                var rating: String = ""
-//                var id: String = ""
-//                var imageURL: String = ""
-//                var distance: String = ""
-
-                for bn in jobj.businesses {
-                    let tmp = business()
-                    tmp.id = bn.id
-                    tmp.imageURL = bn.imageURL
-                    tmp.distance = String(format: "%.1f", bn.distance)
-                    tmp.rating = String(format: "%.1f", bn.rating)
-                    searchResultTable.append(tmp)
-                }
-//
-//                DispatchQueue.main.async {
-//                    self.autoSuggestTableViewController.tableView.reloadData()
-//                }
-
-                
-            } catch DecodingError.dataCorrupted(let context) {
-                print(context.debugDescription)
-            } catch DecodingError.keyNotFound(let key, let context) {
-                print("\(key.stringValue) was not found, \(context.debugDescription)")
-            } catch DecodingError.typeMismatch(let type, let context) {
-                print("\(type) was expected, \(context.debugDescription)")
-            } catch DecodingError.valueNotFound(let type, let context) {
-                print("no value was found for \(type), \(context.debugDescription)")
-            } catch let error {
-                print(error)
-            }
-        } else {
-            // Http error
+    var sid = ""
+    if (suc.Category == "Default"){
+        sid = "KZFzniwnSyZfZ7v7nJ,%20KZFzniwnSyZfZ7v7nE,%20KZFzniwnSyZfZ7v7na,%20KZFzniwnSyZfZ7v7nn,%20KZFzniwnSyZfZ7v7n1"
+    } else if (suc.Category == "Music") {
+        sid = "KZFzniwnSyZfZ7v7nJ"
+    } else if (suc.Category == "Sports") {
+        sid = "KZFzniwnSyZfZ7v7nE"
+    } else if (suc.Category == "Arts & Theatre") {
+        sid = "KZFzniwnSyZfZ7v7na"
+    } else if (suc.Category == "Film") {
+        sid = "KZFzniwnSyZfZ7v7nn"
+    } else {
+        sid = "KZFzniwnSyZfZ7v7n1"
+    }
+    
+    let url = "&keyword=" + suc.kw + "&segmentId=" + sid + "&size=200&unit=miles&radius=" + suc.dist;
+    searchAPI.searchEvent(ss: url, completion: {
+        (searchResult) in
+        if (searchResult == nil) {
+            print("error occur when retrieve data from API")
+            return;
+        }
+        for i in 1...(searchResult?.embedded.events.count)! {
+            searchResultTable.append((searchResult?.embedded.events[i])!)
         }
         
-    }.resume()
+    })
 }
 func reserve() {
     

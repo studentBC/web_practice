@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-class business: Identifiable {
+class business: Identifiable, Codable {
     var name: String = ""
     var rating: String = ""
     var id: String = ""

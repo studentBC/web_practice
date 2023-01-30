@@ -14,9 +14,9 @@
 		AF882B09297DC134004E7099 /* HW9UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF882B08297DC134004E7099 /* HW9UITests.swift */; };
 		AF882B13297DC134004E7099 /* HW9UIUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF882B12297DC134004E7099 /* HW9UIUITests.swift */; };
 		AF882B15297DC134004E7099 /* HW9UIUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF882B14297DC134004E7099 /* HW9UIUITestsLaunchTests.swift */; };
-		AF882B24297DC69A004E7099 /* model.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF882B23297DC69A004E7099 /* model.swift */; };
-		AF882B28297DF4E8004E7099 /* business.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF882B27297DF4E8004E7099 /* business.swift */; };
-		AF98BA35297FA6D300089106 /* BusinessJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF98BA34297FA6D300089106 /* BusinessJSON.swift */; };
+		AFED0D13298727EE0007AE51 /* apiSearchModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFED0D12298727EE0007AE51 /* apiSearchModel.swift */; };
+		AFED0D17298740B70007AE51 /* eventSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFED0D16298740B70007AE51 /* eventSearch.swift */; };
+		AFED0D19298747750007AE51 /* VenueS.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFED0D18298747750007AE51 /* VenueS.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,9 +47,9 @@
 		AF882B0E297DC134004E7099 /* HW9UIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HW9UIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF882B12297DC134004E7099 /* HW9UIUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HW9UIUITests.swift; sourceTree = "<group>"; };
 		AF882B14297DC134004E7099 /* HW9UIUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HW9UIUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		AF882B23297DC69A004E7099 /* model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = model.swift; sourceTree = "<group>"; };
-		AF882B27297DF4E8004E7099 /* business.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = business.swift; sourceTree = "<group>"; };
-		AF98BA34297FA6D300089106 /* BusinessJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessJSON.swift; sourceTree = "<group>"; };
+		AFED0D12298727EE0007AE51 /* apiSearchModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = apiSearchModel.swift; sourceTree = "<group>"; };
+		AFED0D16298740B70007AE51 /* eventSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = eventSearch.swift; sourceTree = "<group>"; };
+		AFED0D18298747750007AE51 /* VenueS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VenueS.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,9 +145,9 @@
 		AF882B22297DC676004E7099 /* model */ = {
 			isa = PBXGroup;
 			children = (
-				AF882B23297DC69A004E7099 /* model.swift */,
-				AF882B27297DF4E8004E7099 /* business.swift */,
-				AF98BA34297FA6D300089106 /* BusinessJSON.swift */,
+				AFED0D12298727EE0007AE51 /* apiSearchModel.swift */,
+				AFED0D16298740B70007AE51 /* eventSearch.swift */,
+				AFED0D18298747750007AE51 /* VenueS.swift */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -283,10 +283,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF882AFA297DC134004E7099 /* ContentView.swift in Sources */,
-				AF882B28297DF4E8004E7099 /* business.swift in Sources */,
-				AF98BA35297FA6D300089106 /* BusinessJSON.swift in Sources */,
-				AF882B24297DC69A004E7099 /* model.swift in Sources */,
+				AFED0D17298740B70007AE51 /* eventSearch.swift in Sources */,
 				AF882AF8297DC134004E7099 /* HW9UIApp.swift in Sources */,
+				AFED0D19298747750007AE51 /* VenueS.swift in Sources */,
+				AFED0D13298727EE0007AE51 /* apiSearchModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
