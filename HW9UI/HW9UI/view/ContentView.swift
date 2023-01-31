@@ -81,8 +81,12 @@ struct ContentView: View {
 //                    //no+=1
 //                }
 //            }
-            List(searchAPI.searchResultTable, id: \.name) {
-                searchTableCell(es: $0)
+            NavigationView {
+                List(searchAPI.searchResultTable, id: \.name) { eve in
+                    NavigationLink(destination: moreInfo(event: eve)) {
+                        searchTableCell(es: eve)
+                    }
+                }
             }
             
         }

@@ -349,7 +349,7 @@ enum OutletType: String, Codable {
 struct PriceRange: Codable {
     let type: PriceRangeType
     let currency: Currency
-    let min, max: Double
+    let min, max: String
 }
 
 enum Currency: String, Codable {
