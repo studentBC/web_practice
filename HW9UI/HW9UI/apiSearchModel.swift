@@ -54,8 +54,9 @@ class apiSearchModel: ObservableObject {
                         print("------ come come ------")
                         print(searchResult.embedded.events.count)
                         for i in 0...(searchResult.embedded.events.count-1) {
-                            print(i)
-                            self.searchResultTable.append((searchResult.embedded.events[i] as Event))
+                            DispatchQueue.main.async {
+                                self.searchResultTable.append((searchResult.embedded.events[i] as Event))
+                            }
                         }
                     } catch {
                         print(error)

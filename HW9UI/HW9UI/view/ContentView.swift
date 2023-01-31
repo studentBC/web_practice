@@ -92,12 +92,18 @@ struct searchTableCell: View {
     let es: Event
     var body: some View{
         HStack {
-            Text((es.dates.start.localDate ?? "") + "\n" + (es.dates.start.localTime ?? ""))
-            AsyncImage(url: URL(string: es.images[0].url))
-                .frame(width: 100, height: 100)
-            Text(es.name)
-            Text(es.classifications[0].segment.name)
-            Text((es.embedded.venues?[0].name)!)
+            Text((es.dates.start.localDate ?? "") + "\n" + (es.dates.start.localTime ?? "")).aspectRatio(contentMode: .fit)
+            AsyncImage(url: URL(string: es.images[0].url),
+                       content: {
+                image in image.resizable().aspectRatio(contentMode: .fit)
+            },
+                       placeholder: {
+                           ProgressView()
+            })
+            Text(es.name).aspectRatio(contentMode: .fit)
+            Text(es.classifications[0].segment.name).aspectRatio(contentMode: .fit)
+            //that is weird here we should debug for it ... maybe json obj error
+            Text((es.embedded.venues?[0].name) ?? "none").aspectRatio(contentMode: .fit)
         }
     }
 }
