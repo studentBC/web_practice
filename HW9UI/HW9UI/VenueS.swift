@@ -7,49 +7,33 @@
 import Foundation
 
 // MARK: - Welcome
+// This file was generated from JSON Schema using quicktype, do not modify it directly.
+// To parse the JSON, add this file to your project and do:
+//
+//   let welcome = try? JSONDecoder().decode(Welcome.self, from: jsonData)
+
+import Foundation
+
+// MARK: - Welcome
 struct VenueS: Codable {
-    let embedded: vEmbedded
-    let links: Links
-    let page: Page
-
-    enum CodingKeys: String, CodingKey {
-        case embedded = "_embedded"
-        case links = "_links"
-        case page
-    }
-}
-// MARK: - Embedded
-struct vEmbedded: Codable {
-    let venues: [vVenue]
-}
-
-// MARK: - Venue
-struct vVenue: Codable {
     let name, type, id: String
     let test: Bool
-    let url: String
-    let locale: String
-    let aliases: [String]
-    let postalCode, timezone: String
-    let city: City
-    let state: SState
-    let country: Country
-    let address: Address
-    let location: Location
-    let markets: [Market]
-    let dmas: [DMA]
-    let upcomingEvents: UpcomingEvents
-    let links: Links
+    let url: String?
+    let locale, postalCode, timezone: String?
+    let city: City?
+    let state: SState?
+    let country: Country?
+    let address: Address?
+    let location: Location?
+    let markets: [Market]?
+    let dmas: [DMA]?
+    let upcomingEvents: UpcomingEvents?
+    let links: Links?
 
     enum CodingKeys: String, CodingKey {
-        case name, type, id, test, url, locale, aliases, postalCode, timezone, city, state, country, address, location, markets, dmas, upcomingEvents
+        case name, type, id, test, url, locale, postalCode, timezone, city, state, country, address, location, markets, dmas, upcomingEvents
         case links = "_links"
     }
-}
-
-// MARK: - City
-struct City: Codable {
-    let name: String
 }
 
 // MARK: - SelfClass
@@ -62,4 +46,8 @@ struct Market: Codable {
     let name, id: String
 }
 
+// MARK: - City
+struct City: Codable {
+    let name: String
+}
 

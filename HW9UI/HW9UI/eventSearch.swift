@@ -187,7 +187,7 @@ struct Image: Codable {
 
 // MARK: - AttractionLinks
 struct AttractionLinks: Codable {
-    let linksSelf: First
+    let linksSelf: First?
 
     enum CodingKeys: String, CodingKey {
         case linksSelf = "self"
@@ -196,7 +196,7 @@ struct AttractionLinks: Codable {
 
 // MARK: - First
 struct First: Codable {
-    let href: String
+    let href: String?
 }
 
 enum Locale: String, Codable {
@@ -325,7 +325,7 @@ enum VenueType: String, Codable {
 
 // MARK: - EventLinks
 struct EventLinks: Codable {
-    let linksSelf: First
+    let linksSelf: First?
     let venues, attractions: [First]?
 
     enum CodingKeys: String, CodingKey {
@@ -349,7 +349,7 @@ enum OutletType: String, Codable {
 struct PriceRange: Codable {
     let type: PriceRangeType
     let currency: Currency
-    let min, max: String
+    let min, max: Double
 }
 
 enum Currency: String, Codable {
@@ -434,7 +434,7 @@ enum EventType: String, Codable {
 
 // MARK: - WelcomeLinks
 struct Links: Codable {
-    let first, linksSelf, next, last: First
+    let first, linksSelf, next, last: First?
 
     enum CodingKeys: String, CodingKey {
         case first

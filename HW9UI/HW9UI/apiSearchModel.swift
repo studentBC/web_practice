@@ -9,13 +9,14 @@ import Foundation
 // check v38
 class apiSearchModel: ObservableObject {
     @Published var searchResultTable: [Event] = []
+    var venue: apiSearchVenue = apiSearchVenue()
     init() {
         
     }
     func goSearch(suc: submitContent) async {
         print(suc.loc, suc.dist, suc.kw, suc.Category)
         var sid = ""
-        if (suc.Category == "Default"){
+        if (suc.Category == "Default") {
             sid = "KZFzniwnSyZfZ7v7nJ,%20KZFzniwnSyZfZ7v7nE,%20KZFzniwnSyZfZ7v7na,%20KZFzniwnSyZfZ7v7nn,%20KZFzniwnSyZfZ7v7n1"
         } else if (suc.Category == "Music") {
             sid = "KZFzniwnSyZfZ7v7nJ"

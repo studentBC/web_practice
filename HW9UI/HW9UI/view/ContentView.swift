@@ -25,6 +25,7 @@ struct ContentView: View {
     @State private var selfLocate: Bool = false
     @State private var searchResultTable: [Event] = []
     @ObservedObject private var searchAPI = apiSearchModel()
+    
     let categories = ["Default", "Music", "Sports", "Arts & Theatre", "Film","Miscellaneous"]
     var body: some View {
         // A cell that, when selected, adds a new folder.
@@ -58,6 +59,12 @@ struct ContentView: View {
                             .tint(.blue)
                         Button(action: {
                             // Closure will be called once user taps your button
+                            kw = "";
+                            selection = "Default";
+                            dist = "";
+                            loc = "";
+                            selfLocate = false;
+                            searchResultTable.removeAll();
                             print("lol")
                         }) {
                             Text("Clear")
