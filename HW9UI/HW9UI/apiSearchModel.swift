@@ -11,11 +11,36 @@ class apiSearchModel: ObservableObject {
     @Published var searchResultTable: [Event] = []
     var venue: apiSearchVenue = apiSearchVenue()
     init() {
-        
+    
+    }
+    func locateMyself() async -> String {
+
+        print("enter to locateMyself")
+        let urlString = "https://ipinfo.io"
+        var ans: String = "Taipei"
+        let url = URL(string:"https://ipinfo.io")
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url!)
+            let answer = try? JSONDecoder().decode(ipInfo.self, from: data);
+            ans = answer!.region + " " + answer!.city
+        } catch {
+            print("error occur when we retrieve ipinfo")
+        }
+        return ans
     }
     func goSearch(suc: submitContent) async {
         print(suc.loc, suc.dist, suc.kw, suc.Category)
         var sid = ""
+        var keyword: String
+        if (suc.selfLocate) {
+            print("enter here man !!!!!")
+            let lol = await locateMyself()
+            let tmp = lol.replacingOccurrences(of: " ", with: "%20")
+            let temp = suc.kw.replacingOccurrences(of: " ", with: "%20")
+            keyword = temp+"%20"+tmp
+        } else {
+            keyword = suc.kw.replacingOccurrences(of: " ", with: "%20")
+        }
         if (suc.Category == "Default") {
             sid = "KZFzniwnSyZfZ7v7nJ,%20KZFzniwnSyZfZ7v7nE,%20KZFzniwnSyZfZ7v7na,%20KZFzniwnSyZfZ7v7nn,%20KZFzniwnSyZfZ7v7n1"
         } else if (suc.Category == "Music") {
@@ -30,10 +55,11 @@ class apiSearchModel: ObservableObject {
             sid = "KZFzniwnSyZfZ7v7n1"
         }
         
-        let url = "&keyword=" + suc.kw + "&segmentId=" + sid + "&size=200&unit=miles&radius=" + suc.dist;
+        let url = "&keyword=" + keyword + "&segmentId=" + sid + "&size=200&unit=miles&radius=" + suc.dist;
         print("enter to getEventResults")
         let urlString = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ" + url
-
+        print("hola hola")
+        print(urlString)
         if let url = URL(string: urlString) {
             
             let session = URLSession(configuration: .default)

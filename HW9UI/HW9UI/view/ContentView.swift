@@ -24,6 +24,7 @@ struct ContentView: View {
     @State private var selection: String = "Default"
     @State private var selfLocate: Bool = false
     @State private var searchResultTable: [Event] = []
+    @State private var showSR = false
     @ObservedObject private var searchAPI = apiSearchModel()
     
     let categories = ["Default", "Music", "Sports", "Arts & Theatre", "Film","Miscellaneous"]
@@ -45,13 +46,16 @@ struct ContentView: View {
                         }
                     }
                     .pickerStyle(.menu)
-                    TextField("Address", text: $loc)
+                    if (!selfLocate) {
+                        TextField("Address", text: $loc)
+                    }
                     Toggle("auto detect my location", isOn: $selfLocate)
                     HStack {
                         Button(action: {
                             Task {
                                 let sbc = submitContent(kw: kw, dist: dist, loc: loc, selfLocate: selfLocate, Category: selection)
                                 await searchAPI.goSearch(suc: sbc)
+                                showSR = true
                             }
                         }) {
                             Text("Submit")
@@ -64,7 +68,8 @@ struct ContentView: View {
                             dist = "";
                             loc = "";
                             selfLocate = false;
-                            searchResultTable.removeAll();
+                            searchAPI.searchResultTable.removeAll();
+                            showSR = false
                             print("lol")
                         }) {
                             Text("Clear")
@@ -89,9 +94,15 @@ struct ContentView: View {
 //                }
 //            }
             NavigationView {
-                List(searchAPI.searchResultTable, id: \.name) { eve in
-                    NavigationLink(destination: moreInfo(event: eve)) {
-                        searchTableCell(es: eve)
+                if (showSR) {
+                    if (searchAPI.searchResultTable.count == 0) {
+                        Text("No Records found").padding().backgroundStyle(.white).foregroundColor(.red)
+                    } else {
+                        List(searchAPI.searchResultTable, id: \.name) { eve in
+                            NavigationLink(destination: moreInfo(event: eve)) {
+                                searchTableCell(es: eve)
+                            }
+                        }
                     }
                 }
             }
