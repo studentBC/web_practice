@@ -58,74 +58,88 @@ class apiSearchModel: ObservableObject {
         let url = "&keyword=" + keyword + "&segmentId=" + sid + "&size=200&unit=miles&radius=" + suc.dist;
         print("enter to getEventResults")
         let urlString = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ" + url
-        print("hola hola")
+        
         print(urlString)
-        if let url = URL(string: urlString) {
+        if let url = URL(string: "http://localhost:3000/getEvents") {
             
             let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { (data, response, error) in
-                if error != nil {
-                    print(error!)
-                    return
-                }
-                
-                if let safeData = data {
-                    
-                    do {
-                        let searchResult = try JSONDecoder().decode(eventSearch.self, from: safeData);
-                        print("we should have data")
-                        if (searchResult.embedded.events.count == 0) {
-                            print("we should show no result here")
-                            return;
-                        }
-                        print("------ come come ------")
-                        print(searchResult.embedded.events.count)
-                        for i in 0...(searchResult.embedded.events.count-1) {
-                            DispatchQueue.main.async {
-                                self.searchResultTable.append((searchResult.embedded.events[i] as Event))
-                            }
-                        }
-                    } catch {
-                        print(error)
-                    }
-                    
-                }
-                
-            }
-            task.resume()
-        }
-    }
-    func searchEvent (ss: String, completion: @escaping(eventSearch?)->()) {
-        guard let url = URL(string: "https://app.ticketmaster.com/discovery/v2/events.json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ"+ss) else {
-            completion(nil);
-            return;
-        }
-        URLSession.shared.dataTask(with: url) {
-            data, response, error in
-            guard let res = data, error == nil else {
-                completion(nil);
-                return;
-            }
-            guard let httpResponse = response as? HTTPURLResponse,
-                (200...299).contains(httpResponse.statusCode) else {
-                print("error occur we get http status code")
-                completion(nil);
+            var request = URLRequest(url: url)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "POST"
+            let ur = urlRequest(url: urlString)
+            guard let encoded = try? JSONEncoder().encode(ur) else {
+                print("Failed to encode order")
                 return
             }
-            print("our url is \(url)")
-            
-            let es = try? JSONDecoder().decode(eventSearch.self, from: res);
-            print("try to get links")
-            print(es?.links)
-            print(es?.embedded)
-            if let events = es {
-                completion(events);
-            } else {
-                print("we did not get our es")
-                completion(nil);
+            print("=== here you are man ===")
+            do {
+                let (data, _) = try await URLSession.shared.upload(for: request, from: encoded)
+                // handle the result
+                do {
+                    print("=== before decoding ===")
+                    
+                    do {
+                        // make sure this JSON is in the format we expect
+                        if let eves : [[String]] = try! JSONSerialization.jsonObject(with: data, options: []) as? [[String]] {
+                            // try to read out a string array
+                            print(eves)
+                            
+                        }
+                    } catch {
+                        print("Failed to load: \(error.localizedDescription)")
+                    }
+                    
+//                    let array = try JSONSerialization.jsonObject(with: data) as! [String]
+//                    print(array)
+                    
+                    //let eves = try JSONSerialization.jsonObject(with: data, options: []) as! [[String]]
+                    print("===== go gog man ====")
+                    //let eves = try JSONDecoder().decode(getevents.self, from: data)
+//                    for eve in eves {
+//                        DispatchQueue.main.async {
+//                            let temp = Event(name: eve[3], date: eve[0], time: eve[1], eventID: eve[6], genre: eve[4], imgUrl: eve[2], venue: eve[5], seatmap: eve[7], ticketStatus: eve[8], buyTicketURL: eve[9], pMin: eve[10], pMax: eve[11], currency: eve[12], venueID: eve[13])
+//                            self.searchResultTable.append((temp))
+//                        }
+//                    }
+                } catch {
+                    print(error)
+                }
+            } catch {
+                print("Checkout failed.")
             }
-        }.resume();
+        }
     }
+//    func searchEvent (ss: String, completion: @escaping(eventSearch?)->()) {
+//        guard let url = URL(string: "https://app.ticketmaster.com/discovery/v2/events.json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ"+ss) else {
+//            completion(nil);
+//            return;
+//        }
+//        URLSession.shared.dataTask(with: url) {
+//            data, response, error in
+//            guard let res = data, error == nil else {
+//                completion(nil);
+//                return;
+//            }
+//            guard let httpResponse = response as? HTTPURLResponse,
+//                (200...299).contains(httpResponse.statusCode) else {
+//                print("error occur we get http status code")
+//                completion(nil);
+//                return
+//            }
+//            print("our url is \(url)")
+//            
+//            let es = try? JSONDecoder().decode(eventSearch.self, from: res);
+//            print("try to get links")
+//            print(es?.links)
+//            print(es?.embedded)
+//            if let events = es {
+//                completion(events);
+//            } else {
+//                print("we did not get our es")
+//                completion(nil);
+//            }
+//        }.resume();
+//    }
     func getVenue (venueId: String, completion: @escaping(VenueS?)->()) {
         guard let url = URL(string: "https://app.ticketmaster.com/discovery/v2/venues/\(venueId).json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ&id=KovZpZA7AAEA") else {
             completion(nil);

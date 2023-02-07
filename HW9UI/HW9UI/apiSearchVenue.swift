@@ -14,7 +14,7 @@ class apiSearchVenue: ObservableObject {
     }
     func goSearch(eve: Event) {
         
-        var vid = eve.embedded.venues?[0].id ?? "KovZpZAIF7aA"
+        var vid = eve.venueID ?? "KovZpZAIF7aA"
         print("----------------------")
         print(vid)
         print("enter to getEventResults")

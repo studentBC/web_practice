@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF7968682992BA8F00D5A41C /* getevents.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7968672992BA8F00D5A41C /* getevents.swift */; };
+		AF79686A2992BB1200D5A41C /* getEventDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7968692992BB1200D5A41C /* getEventDetails.swift */; };
+		AF79686C2992BB8B00D5A41C /* getVenues.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF79686B2992BB8B00D5A41C /* getVenues.swift */; };
+		AF79686E2992BBBA00D5A41C /* getVenueDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF79686D2992BBBA00D5A41C /* getVenueDetails.swift */; };
+		AF7968702992C08300D5A41C /* urlRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF79686F2992C08300D5A41C /* urlRequest.swift */; };
 		AF882AF8297DC134004E7099 /* HW9UIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF882AF7297DC134004E7099 /* HW9UIApp.swift */; };
 		AF882AFA297DC134004E7099 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF882AF9297DC134004E7099 /* ContentView.swift */; };
 		AF882AFC297DC134004E7099 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AF882AFB297DC134004E7099 /* Assets.xcassets */; };
@@ -40,6 +45,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AF7968672992BA8F00D5A41C /* getevents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getevents.swift; sourceTree = "<group>"; };
+		AF7968692992BB1200D5A41C /* getEventDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getEventDetails.swift; sourceTree = "<group>"; };
+		AF79686B2992BB8B00D5A41C /* getVenues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getVenues.swift; sourceTree = "<group>"; };
+		AF79686D2992BBBA00D5A41C /* getVenueDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getVenueDetails.swift; sourceTree = "<group>"; };
+		AF79686F2992C08300D5A41C /* urlRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = urlRequest.swift; sourceTree = "<group>"; };
 		AF882AF4297DC134004E7099 /* HW9UI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HW9UI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF882AF7297DC134004E7099 /* HW9UIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HW9UIApp.swift; sourceTree = "<group>"; };
 		AF882AF9297DC134004E7099 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -157,6 +167,11 @@
 				AFED0D18298747750007AE51 /* VenueS.swift */,
 				AFCA87312989871E0057BC7B /* apiSearchVenue.swift */,
 				AF95031A298ADEB200CE48A8 /* ipInfo.swift */,
+				AF7968672992BA8F00D5A41C /* getevents.swift */,
+				AF7968692992BB1200D5A41C /* getEventDetails.swift */,
+				AF79686B2992BB8B00D5A41C /* getVenues.swift */,
+				AF79686D2992BBBA00D5A41C /* getVenueDetails.swift */,
+				AF79686F2992C08300D5A41C /* urlRequest.swift */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -291,14 +306,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AF79686A2992BB1200D5A41C /* getEventDetails.swift in Sources */,
 				AF882AFA297DC134004E7099 /* ContentView.swift in Sources */,
 				AFCA87322989871E0057BC7B /* apiSearchVenue.swift in Sources */,
 				AFED0D17298740B70007AE51 /* eventSearch.swift in Sources */,
 				AF882AF8297DC134004E7099 /* HW9UIApp.swift in Sources */,
+				AF7968702992C08300D5A41C /* urlRequest.swift in Sources */,
+				AF79686E2992BBBA00D5A41C /* getVenueDetails.swift in Sources */,
 				AF95031B298ADEB200CE48A8 /* ipInfo.swift in Sources */,
 				AFED0D19298747750007AE51 /* VenueS.swift in Sources */,
 				AFCA8730298983710057BC7B /* moreInfo.swift in Sources */,
 				AFED0D13298727EE0007AE51 /* apiSearchModel.swift in Sources */,
+				AF79686C2992BB8B00D5A41C /* getVenues.swift in Sources */,
+				AF7968682992BA8F00D5A41C /* getevents.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -33,8 +33,11 @@ struct ContentView: View {
         // reserve seat logo
         
         VStack {
-            Button(action: reserve) { //maybe this one is navigation link on 12
-                Label("", systemImage: "calendar.badge.plus")
+            HStack {
+                Spacer().frame(maxWidth:.infinity)
+                Button(action: reserve) { //maybe this one is navigation link on 12
+                    Label("", systemImage: "calendar.badge.plus")
+                }
             }
             NavigationView {
                 Form {
@@ -114,8 +117,8 @@ struct searchTableCell: View {
     let es: Event
     var body: some View{
         HStack {
-            Text((es.dates.start.localDate ?? "") + "\n" + (es.dates.start.localTime ?? "")).aspectRatio(contentMode: .fit)
-            AsyncImage(url: URL(string: es.images[0].url),
+            Text((es.date ?? "") + "\n" + (es.time ?? "")).aspectRatio(contentMode: .fit)
+            AsyncImage(url: URL(string: es.imgUrl),
                        content: {
                 image in image.resizable().aspectRatio(contentMode: .fit)
             },
@@ -123,9 +126,9 @@ struct searchTableCell: View {
                            ProgressView()
             })
             Text(es.name).aspectRatio(contentMode: .fit)
-            Text(es.classifications[0].segment.name).aspectRatio(contentMode: .fit)
+            Text(es.genre).aspectRatio(contentMode: .fit)
             //that is weird here we should debug for it ... maybe json obj error
-            Text((es.embedded.venues?[0].name) ?? "none").aspectRatio(contentMode: .fit)
+            Text((es.venue) ?? "none").aspectRatio(contentMode: .fit)
         }
     }
 }

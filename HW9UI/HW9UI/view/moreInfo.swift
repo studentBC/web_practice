@@ -19,23 +19,23 @@ struct moreInfo: View {
     
     var body: some View {
         VStack {
-            Text((event.embedded.venues?[0].name ?? "lol"))
+            Text((event.venue ?? "lol"))
             HStack {
                 VStack(alignment: .leading) {
                     Text("Date").aspectRatio(contentMode: .fit)
-                    Text(event.dates.start.localDate ?? "?"+" " + (event.dates.start.localTime ?? "")).multilineTextAlignment(.leading).aspectRatio(contentMode: .fit)
+                    Text(event.date ?? "?"+" " + (event.time ?? "")).multilineTextAlignment(.leading).aspectRatio(contentMode: .fit)
                     Text("Artist/Team").aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
                     //we need to change venue json obj to get the link ...
                     //Text("[\(event.embedded.attractions[0]?.name)](\())")
                     Text("Genres").aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
-                    Text(event.classifications[0].segment.name).aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
+                    Text(event.genre).aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
                     Text("Price Ranges").aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
-                    Text("\(Int(event.priceRanges?[0].min ?? 0))-\(Int(event.priceRanges?[0].max ?? 0)) \(event.priceRanges?[0].currency.rawValue ?? "USD")").aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
+                    Text("\(event.pMin)-\(event.pMax) \(event.currency)").aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
                     Group {
                         Text("Ticket Status")
-                        if (event.dates.status.code.rawValue == "onsale") {
+                        if (event.ticketStatus == "onsale") {
                             Text("On Sale").padding(5).cornerRadius(8).backgroundStyle(.red)
-                        } else if (event.dates.status.code.rawValue == "offsale") {
+                        } else if (event.ticketStatus == "offsale") {
                             Text("Off Sale").padding(5).cornerRadius(8).backgroundStyle(.green)
                         } else {
                             Text("Rescheduled").padding(5).cornerRadius(8).backgroundStyle(.yellow)
@@ -43,14 +43,14 @@ struct moreInfo: View {
                     }.aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
                     Text("Buy TicketAt:").aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
                     //Link("Ticketmaster", destination: URL(string: event.url)!)
-                    Text(.init("[Ticketmaster](\(event.url))")).aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
+                    Text(.init("[Ticketmaster](\(event.buyTicketURL))")).aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
                     
                     
                     //                    Text("Ticketmaster").onTapGesture {
                     //                        UIApplication.shared.open(URL(string: event.url)!)
                     //                    }
                 }
-                AsyncImage(url: URL(string: event.seatmap?.staticURL ?? ""),
+                AsyncImage(url: URL(string: event.seatmap ?? ""),
                            content: {
                     image in image.resizable().aspectRatio(contentMode: .fit)
                 },
@@ -63,7 +63,7 @@ struct moreInfo: View {
     func lol() {
         print("=== enter  \(event.name) ===")
         getVenue.goSearch(eve: event)
-        print(getVenue.venueDetail?.name)
+        //print(getVenue.venueDetail?.name)
         print("------------------------")
     }
 }
