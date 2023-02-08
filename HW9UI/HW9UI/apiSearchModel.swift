@@ -74,33 +74,24 @@ class apiSearchModel: ObservableObject {
             print("=== here you are man ===")
             do {
                 let (data, _) = try await URLSession.shared.upload(for: request, from: encoded)
+                //print(String(decoding: data, as: UTF8.self))
                 // handle the result
                 do {
+
                     print("=== before decoding ===")
-                    
-                    do {
-                        // make sure this JSON is in the format we expect
-                        if let eves : [[String]] = try! JSONSerialization.jsonObject(with: data, options: []) as? [[String]] {
-                            // try to read out a string array
-                            print(eves)
-                            
-                        }
-                    } catch {
-                        print("Failed to load: \(error.localizedDescription)")
-                    }
-                    
-//                    let array = try JSONSerialization.jsonObject(with: data) as! [String]
-//                    print(array)
-                    
+                    // make sure this JSON is in the format we expect
+                    var eves = try! JSONSerialization.jsonObject(with: data, options: []) as? [[String]]
+                        // try to read out a string array
+                    print(eves)
                     //let eves = try JSONSerialization.jsonObject(with: data, options: []) as! [[String]]
                     print("===== go gog man ====")
                     //let eves = try JSONDecoder().decode(getevents.self, from: data)
-//                    for eve in eves {
-//                        DispatchQueue.main.async {
-//                            let temp = Event(name: eve[3], date: eve[0], time: eve[1], eventID: eve[6], genre: eve[4], imgUrl: eve[2], venue: eve[5], seatmap: eve[7], ticketStatus: eve[8], buyTicketURL: eve[9], pMin: eve[10], pMax: eve[11], currency: eve[12], venueID: eve[13])
-//                            self.searchResultTable.append((temp))
-//                        }
-//                    }
+                    for(index, eve) in eves!.enumerated() {
+                        DispatchQueue.main.async {
+                            let temp = Event(name: eve[3], date: eve[0], time: eve[1], eventID: eve[6], genre: eve[4], imgUrl: eve[2], venue: eve[5], seatmap: eve[7], ticketStatus: eve[8], buyTicketURL: eve[9], pMin: eve[10], pMax: eve[11], currency: eve[12], venueID: eve[13])
+                            self.searchResultTable.append((temp))
+                        }
+                    }
                 } catch {
                     print(error)
                 }
@@ -109,37 +100,6 @@ class apiSearchModel: ObservableObject {
             }
         }
     }
-//    func searchEvent (ss: String, completion: @escaping(eventSearch?)->()) {
-//        guard let url = URL(string: "https://app.ticketmaster.com/discovery/v2/events.json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ"+ss) else {
-//            completion(nil);
-//            return;
-//        }
-//        URLSession.shared.dataTask(with: url) {
-//            data, response, error in
-//            guard let res = data, error == nil else {
-//                completion(nil);
-//                return;
-//            }
-//            guard let httpResponse = response as? HTTPURLResponse,
-//                (200...299).contains(httpResponse.statusCode) else {
-//                print("error occur we get http status code")
-//                completion(nil);
-//                return
-//            }
-//            print("our url is \(url)")
-//            
-//            let es = try? JSONDecoder().decode(eventSearch.self, from: res);
-//            print("try to get links")
-//            print(es?.links)
-//            print(es?.embedded)
-//            if let events = es {
-//                completion(events);
-//            } else {
-//                print("we did not get our es")
-//                completion(nil);
-//            }
-//        }.resume();
-//    }
     func getVenue (venueId: String, completion: @escaping(VenueS?)->()) {
         guard let url = URL(string: "https://app.ticketmaster.com/discovery/v2/venues/\(venueId).json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ&id=KovZpZA7AAEA") else {
             completion(nil);

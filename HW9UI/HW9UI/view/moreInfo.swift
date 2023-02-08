@@ -58,11 +58,15 @@ struct moreInfo: View {
                     ProgressView()
                 })
             }
-        }.onAppear(perform: self.lol)
+        }.task {
+            print("-----------------")
+            print(event.seatmap)
+            //await self.lol()
+        }
     }
-    func lol() {
+    func lol() async {
         print("=== enter  \(event.name) ===")
-        getVenue.goSearch(eve: event)
+        await getVenue.goSearch(eve: event)
         //print(getVenue.venueDetail?.name)
         print("------------------------")
     }
