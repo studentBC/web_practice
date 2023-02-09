@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AF3113F129956E2900323BB3 /* GeoHasg.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3113F029956E2900323BB3 /* GeoHasg.swift */; };
+		AF3113F32995732A00323BB3 /* googleGeo.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3113F22995732A00323BB3 /* googleGeo.swift */; };
 		AF7968682992BA8F00D5A41C /* getevents.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7968672992BA8F00D5A41C /* getevents.swift */; };
 		AF79686A2992BB1200D5A41C /* getEventDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7968692992BB1200D5A41C /* getEventDetails.swift */; };
 		AF79686C2992BB8B00D5A41C /* getVenues.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF79686B2992BB8B00D5A41C /* getVenues.swift */; };
@@ -45,6 +47,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AF3113F029956E2900323BB3 /* GeoHasg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoHasg.swift; sourceTree = "<group>"; };
+		AF3113F22995732A00323BB3 /* googleGeo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = googleGeo.swift; sourceTree = "<group>"; };
 		AF7968672992BA8F00D5A41C /* getevents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getevents.swift; sourceTree = "<group>"; };
 		AF7968692992BB1200D5A41C /* getEventDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getEventDetails.swift; sourceTree = "<group>"; };
 		AF79686B2992BB8B00D5A41C /* getVenues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = getVenues.swift; sourceTree = "<group>"; };
@@ -172,6 +176,8 @@
 				AF79686B2992BB8B00D5A41C /* getVenues.swift */,
 				AF79686D2992BBBA00D5A41C /* getVenueDetails.swift */,
 				AF79686F2992C08300D5A41C /* urlRequest.swift */,
+				AF3113F029956E2900323BB3 /* GeoHasg.swift */,
+				AF3113F22995732A00323BB3 /* googleGeo.swift */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -308,6 +314,8 @@
 			files = (
 				AF79686A2992BB1200D5A41C /* getEventDetails.swift in Sources */,
 				AF882AFA297DC134004E7099 /* ContentView.swift in Sources */,
+				AF3113F129956E2900323BB3 /* GeoHasg.swift in Sources */,
+				AF3113F32995732A00323BB3 /* googleGeo.swift in Sources */,
 				AFCA87322989871E0057BC7B /* apiSearchVenue.swift in Sources */,
 				AFED0D17298740B70007AE51 /* eventSearch.swift in Sources */,
 				AF882AF8297DC134004E7099 /* HW9UIApp.swift in Sources */,

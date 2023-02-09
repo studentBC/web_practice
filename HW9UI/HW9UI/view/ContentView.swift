@@ -31,7 +31,6 @@ struct ContentView: View {
     var body: some View {
         // A cell that, when selected, adds a new folder.
         // reserve seat logo
-        
         VStack {
             HStack {
                 Spacer().frame(maxWidth:.infinity)
@@ -50,7 +49,7 @@ struct ContentView: View {
                     }
                     .pickerStyle(.menu)
                     if (!selfLocate) {
-                        TextField("Address", text: $loc)
+                        TextField("Location", text: $loc)
                     }
                     Toggle("auto detect my location", isOn: $selfLocate)
                     HStack {

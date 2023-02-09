@@ -13,6 +13,21 @@ class apiSearchModel: ObservableObject {
     init() {
     
     }
+    func googleAPI(Location: String)async -> String {
+        let location = Location.replacingOccurrences(of: " ", with: "+")
+        let gkey = "AIzaSyBdSh29p_B93XTLF7qB0XtnfnjxQudHCA8";
+        var ans: String = ""
+        let url = URL(string:"https://maps.googleapis.com/maps/api/geocode/json?address=" + location + "&key=" + gkey)
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url!)
+            let answer = try? JSONDecoder().decode(gGeo.self, from: data);
+            //ans = answer!.region + " " + answer!.city
+            ans = Geohash.encode(latitude: answer!.results[0].geometry.location.lat, longitude: answer!.results[0].geometry.location.lng, length: 5)
+        } catch {
+            print("error occur when we retrieve ipinfo")
+        }
+        return ans
+    }
     func locateMyself() async -> String {
 
         print("enter to locateMyself")
@@ -22,7 +37,8 @@ class apiSearchModel: ObservableObject {
         do {
             let (data, response) = try await URLSession.shared.data(from: url!)
             let answer = try? JSONDecoder().decode(ipInfo.self, from: data);
-            ans = answer!.region + " " + answer!.city
+            //ans = answer!.region + " " + answer!.city
+            ans = answer!.loc
         } catch {
             print("error occur when we retrieve ipinfo")
         }
@@ -31,18 +47,24 @@ class apiSearchModel: ObservableObject {
     func goSearch(suc: submitContent) async {
         print(suc.loc, suc.dist, suc.kw, suc.Category)
         var sid = ""
-        var keyword: String
+        var location=""
+        var keyword: String = suc.kw
         if (suc.selfLocate) {
             print("enter here man !!!!!")
             let lol = await locateMyself()
-            let tmp = lol.replacingOccurrences(of: " ", with: "%20")
-            let temp = suc.kw.replacingOccurrences(of: " ", with: "%20")
-            keyword = temp+"%20"+tmp
+            let components = lol.components(separatedBy: ",")
+            let s = Geohash.encode(latitude: Double(components[0])!, longitude: Double(components[1])!, length: 5)
+            location = s
+//            let tmp = lol.replacingOccurrences(of: " ", with: "%20")
+//            let temp = suc.kw.replacingOccurrences(of: " ", with: "%20")
+//            keyword = temp+"%20"+tmp
         } else {
-            keyword = suc.kw.replacingOccurrences(of: " ", with: "%20")
+            //call google API get lat lng
+            //use google geoapi to get lat lng
+            location = await googleAPI(Location: suc.loc)
         }
         if (suc.Category == "Default") {
-            sid = "KZFzniwnSyZfZ7v7nJ,%20KZFzniwnSyZfZ7v7nE,%20KZFzniwnSyZfZ7v7na,%20KZFzniwnSyZfZ7v7nn,%20KZFzniwnSyZfZ7v7n1"
+            sid = ""
         } else if (suc.Category == "Music") {
             sid = "KZFzniwnSyZfZ7v7nJ"
         } else if (suc.Category == "Sports") {
@@ -54,46 +76,47 @@ class apiSearchModel: ObservableObject {
         } else {
             sid = "KZFzniwnSyZfZ7v7n1"
         }
-        
-        let url = "&keyword=" + keyword + "&segmentId=" + sid + "&size=200&unit=miles&radius=" + suc.dist;
+        var dd = suc.dist
+        if (dd == "") {
+            dd = "10"
+        }
+        keyword = suc.kw.replacingOccurrences(of: " ", with: "%20")
+        let urlString = "keyword=" + keyword + "&segmentId=" + sid + "&size=200&unit=miles&radius=" + dd + "&geoPoint="+location;
         print("enter to getEventResults")
-        let urlString = "https://app.ticketmaster.com/discovery/v2/events.json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ" + url
-        
         print(urlString)
-        if let url = URL(string: "http://localhost:3000/getEvents") {
-            
-            let session = URLSession(configuration: .default)
-            var request = URLRequest(url: url)
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpMethod = "POST"
-            let ur = urlRequest(url: urlString)
-            guard let encoded = try? JSONEncoder().encode(ur) else {
-                print("Failed to encode order")
-                return
-            }
-            print("=== here you are man ===")
-            do {
-                let (data, _) = try await URLSession.shared.upload(for: request, from: encoded)
-                //print(String(decoding: data, as: UTF8.self))
-                // handle the result
-                do {
+        
+        
+        var components = URLComponents()
+//        components.scheme = "http"
+//        components.host = "localhost:3000"
+//        components.path = "/getEvents"
 
-                    print("=== before decoding ===")
-                    // make sure this JSON is in the format we expect
-                    var eves = try! JSONSerialization.jsonObject(with: data, options: []) as? [[String]]
-                        // try to read out a string array
-                    print(eves)
-                    //let eves = try JSONSerialization.jsonObject(with: data, options: []) as! [[String]]
-                    print("===== go gog man ====")
-                    //let eves = try JSONDecoder().decode(getevents.self, from: data)
-                    for(index, eve) in eves!.enumerated() {
-                        DispatchQueue.main.async {
-                            let temp = Event(name: eve[3], date: eve[0], time: eve[1], eventID: eve[6], genre: eve[4], imgUrl: eve[2], venue: eve[5], seatmap: eve[7], ticketStatus: eve[8], buyTicketURL: eve[9], pMin: eve[10], pMax: eve[11], currency: eve[12], venueID: eve[13])
-                            self.searchResultTable.append((temp))
-                        }
+        components.queryItems = [
+            URLQueryItem(name: "url", value: urlString)
+        ]
+
+        // "https://advswift.com/home?topic=swift&page=urls"
+        print("component string is ")
+        print(components.string)
+        
+        if let url = URL(string: "http://localhost:3000/getEvents"+components.string!) {
+            do {
+                print("=== before decoding ===")
+                print(url)
+                let (data, response) = try await URLSession.shared.data(from: url)
+                //print(data)
+                //print(response)
+                var eves = try! JSONSerialization.jsonObject(with: data, options: []) as? [[String]]
+                    // try to read out a string array
+                print(eves)
+                //let eves = try JSONSerialization.jsonObject(with: data, options: []) as! [[String]]
+                //print("===== go gog man ====")
+                //let eves = try JSONDecoder().decode(getevents.self, from: data)
+                for(index, eve) in eves!.enumerated() {
+                    DispatchQueue.main.async {
+                        let temp = Event(name: eve[3], date: eve[0], time: eve[1], eventID: eve[6], genre: eve[4], imgUrl: eve[2], venue: eve[5], seatmap: eve[7], ticketStatus: eve[8], buyTicketURL: eve[9], pMin: eve[10], pMax: eve[11], currency: eve[12], venueID: eve[13])
+                        self.searchResultTable.append((temp))
                     }
-                } catch {
-                    print(error)
                 }
             } catch {
                 print("Checkout failed.")

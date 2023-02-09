@@ -19,36 +19,25 @@ class apiSearchVenue: ObservableObject {
         print(vid)
         print("enter to getEventResults")
         let urlString = "https://app.ticketmaster.com/discovery/v2/venues/\(vid).json?apikey=uAFLpjEgT9FAAj213SNDEUVZKB9lw0WJ"
-        if let url = URL(string: "http://localhost:3000/getVenuesDetails") {
-            
-            let session = URLSession(configuration: .default)
-            var request = URLRequest(url: url)
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.httpMethod = "POST"
-            let ur = urlRequest(url: urlString)
-            guard let encoded = try? JSONEncoder().encode(ur) else {
-                print("Failed to encode order")
-                return
-            }
-            print("=== here you are man ===")
+        
+        
+        var components = URLComponents()
+        components.queryItems = [
+            URLQueryItem(name: "url", value: urlString)
+        ]
+        print("component string is ")
+        print(components.string)
+        
+        if let url = URL(string: "http://localhost:3000/getVenuesDetails"+components.string!) {
             do {
-                let (data, _) = try await URLSession.shared.upload(for: request, from: encoded)
-                //print(String(decoding: data, as: UTF8.self))
-                // handle the result
-                do {
-                    print("===== go gog man ====")
-                    let eves = try JSONDecoder().decode(getVenueDetails.self, from: data)
-                    venueDetail = eves
-//                    venueDetail?.vname = eves.vname
-//                    venueDetail?.vdaddr = eves.vdaddr
-                } catch {
-                    print(error)
-                }
+                print("=== before decoding ===")
+                print(url)
+                let (data, response) = try await URLSession.shared.data(from: url)
+                let eves = try JSONDecoder().decode(getVenueDetails.self, from: data)
+                venueDetail = eves
             } catch {
                 print("Checkout failed.")
             }
         }
-
-        
     }
 }

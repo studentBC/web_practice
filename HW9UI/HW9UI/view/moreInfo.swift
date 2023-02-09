@@ -21,27 +21,27 @@ struct moreInfo: View {
         VStack {
             Text((event.venue ?? "lol"))
             HStack {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text("Date").aspectRatio(contentMode: .fit)
                     Text(event.date ?? "?"+" " + (event.time ?? "")).multilineTextAlignment(.leading).aspectRatio(contentMode: .fit)
-                    Text("Artist/Team").aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
+                    Text("Artist/Team").padding(.top, 5)
                     //we need to change venue json obj to get the link ...
                     //Text("[\(event.embedded.attractions[0]?.name)](\())")
-                    Text("Genres").aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
+                    Text("Genres").padding(.top, 5)
                     Text(event.genre).aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
-                    Text("Price Ranges").aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
+                    Text("Price Ranges").padding(.top, 5)
                     Text("\(event.pMin)-\(event.pMax) \(event.currency)").aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
                     Group {
                         Text("Ticket Status")
                         if (event.ticketStatus == "onsale") {
-                            Text("On Sale").padding(5).cornerRadius(8).backgroundStyle(.red)
+                            Text("On Sale").padding(3).background(.green).cornerRadius(8).foregroundColor(.black)
                         } else if (event.ticketStatus == "offsale") {
-                            Text("Off Sale").padding(5).cornerRadius(8).backgroundStyle(.green)
+                            Text("Off Sale").padding(3).background(.red).cornerRadius(8).foregroundColor(.white)
                         } else {
-                            Text("Rescheduled").padding(5).cornerRadius(8).backgroundStyle(.yellow)
+                            Text("Rescheduled").padding(3).background(.yellow).cornerRadius(8).foregroundColor(.black)
                         }
-                    }.aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
-                    Text("Buy TicketAt:").aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
+                    }.padding(.top, 8)
+                    Text("Buy TicketAt:").aspectRatio(contentMode: .fit).multilineTextAlignment(.leading).padding(.top, 5)
                     //Link("Ticketmaster", destination: URL(string: event.url)!)
                     Text(.init("[Ticketmaster](\(event.buyTicketURL))")).aspectRatio(contentMode: .fit).multilineTextAlignment(.leading)
                     
@@ -56,13 +56,9 @@ struct moreInfo: View {
                 },
                            placeholder: {
                     ProgressView()
-                })
+                }).frame(width: 200)
             }
-        }.task {
-            print("-----------------")
-            print(event.seatmap)
-            //await self.lol()
-        }
+        }.scaledToFit().task(lol)
     }
     func lol() async {
         print("=== enter  \(event.name) ===")
